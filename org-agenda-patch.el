@@ -75,8 +75,13 @@ specification like [h]h:mm."
 	       (wdays (if suppress-prewarning
 			  (let ((org-deadline-warning-days suppress-prewarning))
 			    (org-get-wdays s))
-			(org-get-wdays s))))
+        (org-get-wdays s)))
+
+        (scheduleds (org-entry-get nil "SCHEDULED"))
+        (scheduled (if scheduleds (org-agenda--timestamp-to-absolute scheduleds) nil))
+        )
 	  (cond
+     ((and scheduled (and deadline (<= deadline scheduled))) (throw :skip nil))
 	   ;; Only display deadlines at their base date, at future
 	   ;; repeat occurrences or in today agenda.
 	   ((= current deadline) nil)

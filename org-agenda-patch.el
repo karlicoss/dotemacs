@@ -77,11 +77,16 @@ specification like [h]h:mm."
 			    (org-get-wdays s))
         (org-get-wdays s)))
 
+        (deadlines (org-entry-get nil "DEADLINE")) ; ugh fucking ridiculous
+        (rdeadline (if deadlines (org-get-repeat deadlines) nil))
+        (rrepeat (if rdeadline (substring rdeadline 0 2) nil))
+        ; fucking hell, I can't even match agains regex, wtf????
+        (rdeadline-every (if rrepeat (not (or (string= rrepeat "++") (string= rrepeat ".+"))) nil))
         (scheduleds (org-entry-get nil "SCHEDULED"))
         (scheduled (if scheduleds (org-agenda--timestamp-to-absolute scheduleds) nil))
         )
 	  (cond
-     ((and scheduled (and deadline (<= deadline scheduled))) (throw :skip nil))
+     ((and rdeadline-every scheduled deadline (<= deadline scheduled)) (throw :skip nil))
 	   ;; Only display deadlines at their base date, at future
 	   ;; repeat occurrences or in today agenda.
 	   ((= current deadline) nil)

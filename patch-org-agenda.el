@@ -54,7 +54,7 @@ specification like [h]h:mm."
 		     s base 'future (current-buffer) pos)))))
 	       (diff (- deadline current))
 	       (suppress-prewarning
-		(let ((scheduled
+		(let* ((scheduled
 		       (and org-agenda-skip-deadline-prewarning-if-scheduled
 			    (org-entry-get nil "SCHEDULED"))))
 		  (cond
@@ -81,12 +81,23 @@ specification like [h]h:mm."
         (rdeadline (if deadlines (org-get-repeat deadlines) nil))
         (rrepeat (if rdeadline (substring rdeadline 0 2) nil))
         ; fucking hell, I can't even match agains regex, wtf????
-        (rdeadline-every (if rrepeat (not (or (string= rrepeat "++") (string= rrepeat ".+"))) nil))
+        (rdeadline-every (if rrepeat (not (string= rrepeat "++")) nil))
         (scheduleds (org-entry-get nil "SCHEDULED"))
         (scheduled (if scheduleds (org-agenda--timestamp-to-absolute scheduleds) nil))
+        (blah-debug (when nil (message (format "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s"
+                                             current
+                                             deadline deadlines
+                                             scheduled scheduleds
+                                             repeat rrepeat
+                                             rdeadline
+                                             rrepeat rdeadline-every
+                                             )))) ;  TODO debug doesn't work :()
         )
+    ; if you wanna debug conditions, just wrap in (progn (message ) )
 	  (cond
-     ((and rdeadline-every scheduled deadline (<= deadline scheduled)) (throw :skip nil))
+     ((and rdeadline-every       scheduled deadline (< repeat current)) (throw :skip nil))
+     ; not rdeadline-every is too keep compatibility with 'normal' entries
+     ((and (not rdeadline-every) scheduled deadline (<= deadline scheduled)) (throw :skip nil))
 	   ;; Only display deadlines at their base date, at future
 	   ;; repeat occurrences or in today agenda.
 	   ((= current deadline) nil)

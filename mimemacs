@@ -1,0 +1,6 @@
+#!/bin/bash
+fname="$(echo "$1" | cut -c 7-)" # strip off 'emacs:'
+notify-send "opening $fname"
+
+# TODO I guess em should be available in .profile?
+em "$fname"

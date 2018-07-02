@@ -1,6 +1,37 @@
-#!/bin/bash
-fname="$(echo "$1" | cut -c 7-)" # strip off 'emacs:'
-notify-send "opening $fname"
+#!/usr/bin/env python3
+import sys
+import subprocess
 
-# TODO I guess em should be available in .profile?
-em "$fname"
+def error(what):
+    subprocess.run(["notify-send", what])
+    sys.exit(1)
+
+if len(sys.argv) != 2:
+    error(f"Unexpected number of args {sys.argv}")
+
+protocol = "emacs:"
+
+uri = sys.argv[1]
+if not uri.startswith(protocol):
+    error(f"Unexpected protocol {uri}")
+
+uri = uri[len(protocol):]
+spl = uri.split(':')
+
+linenum = []
+if len(spl) == 1:
+    pass # no lnum specified
+elif len(spl) == 2:
+    uri = spl[0]
+    linenum = ["+" + spl[1]]
+else:
+    error(f"Extra colons in URI {uri}")
+
+subprocess.check_output([
+    "terminator",
+    "-x",
+    "emacsclient",
+    "-t",
+] + linenum + [
+    uri
+])

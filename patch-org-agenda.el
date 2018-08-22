@@ -79,9 +79,10 @@ specification like [h]h:mm."
 
         (deadlines (org-entry-get nil "DEADLINE")) ; ugh fucking ridiculous
         (rdeadline (if deadlines (org-get-repeat deadlines) nil))
-        (rrepeat (if rdeadline (substring rdeadline 0 2) nil))
+        (rrepeat (if rdeadline (substring rdeadline 0 1) nil))
         ; fucking hell, I can't even match agains regex, wtf????
-        (rdeadline-every (if rrepeat (not (string= rrepeat "++")) nil))
+        ;; (rdeadline-every (if rrepeat (or (string= rrepeat "++") (string= rrepeat ".+")) nil))
+        ;; TODO instead sheduled I could use special 'postponed' property?... but whatever
         (scheduleds (org-entry-get nil "SCHEDULED"))
         (scheduled (if scheduleds (org-agenda--timestamp-to-absolute scheduleds) nil))
         (blah-debug (when nil (message (format "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s"
@@ -95,9 +96,12 @@ specification like [h]h:mm."
         )
     ; if you wanna debug conditions, just wrap in (progn (message ) )
 	  (cond
-     ((and rdeadline-every       scheduled deadline (< repeat current)) (throw :skip nil))
-     ; not rdeadline-every is too keep compatibility with 'normal' entries
-     ((and (not rdeadline-every) scheduled deadline (<= deadline scheduled)) (throw :skip nil))
+     ; so, if it's got both repeating deadline and scheduled AND scheduled in the future AND deadline in past or today, we wanna skip it
+     ; otherwise, normal logic
+     ((and rrepeat scheduled (> scheduled current) (<= deadline current)) (throw :skip nil)); TODO not sure why I had it... (< repeat current)
+     ; not rdeadline-every is too keep compatibility with 'normal' entries ; UPD: no idea what was that...
+     ;; ((and (not rdeadline-every) scheduled deadline (<= deadline scheduled)) (throw :skip nil))
+
 	   ;; Only display deadlines at their base date, at future
 	   ;; repeat occurrences or in today agenda.
 	   ((= current deadline) nil)

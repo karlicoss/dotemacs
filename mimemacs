@@ -1,37 +1,75 @@
 #!/usr/bin/env python3
+import argparse
+from pathlib import Path
 import sys
 import subprocess
+from subprocess import check_call, run
+import tempfile
 
 def error(what):
-    subprocess.run(["notify-send", what])
+    run(["notify-send", what])
     sys.exit(1)
-
-if len(sys.argv) != 2:
-    error(f"Unexpected number of args {sys.argv}")
 
 protocol = "emacs:"
 
-uri = sys.argv[1]
-if not uri.startswith(protocol):
-    error(f"Unexpected protocol {uri}")
 
-uri = uri[len(protocol):]
-spl = uri.split(':')
+def install():
+    this_script = str(Path(__file__).absolute())
+    CONTENT = f"""
+[Desktop Entry]
+Name=Emacs Mime handler
+Exec={this_script} %u
+Icon=emacs-icon
+Type=Application
+Terminal=false
+MimeType=x-scheme-handler/emacs;
+""".strip()
+    with tempfile.TemporaryDirectory() as td:
+        pp = Path(td) / 'mimemacs.desktop'
+        pp.write_text(CONTENT)
+        check_call(['desktop-file-validate', str(pp)])
+        check_call([
+            'desktop-file-install',
+            '--dir', str(Path('~/.local/share/applications').expanduser()),
+            '--rebuild-mime-info-cache',
+            str(pp),
+        ])
 
-linenum = []
-if len(spl) == 1:
-    pass # no lnum specified
-elif len(spl) == 2:
-    uri = spl[0]
-    linenum = ["+" + spl[1]]
-else:
-    error(f"Extra colons in URI {uri}")
 
-subprocess.check_output([
-    "terminator",
-    "-x",
-    "emacsclient",
-    "-t",
-] + linenum + [
-    uri
-])
+def open(uri: str):
+    if not uri.startswith(protocol):
+        error(f"Unexpected protocol {uri}")
+
+    uri = uri[len(protocol):]
+    spl = uri.split(':')
+
+    linenum = []
+    if len(spl) == 1:
+        pass # no lnum specified
+    elif len(spl) == 2:
+        uri = spl[0]
+        linenum = ["+" + spl[1]]
+    else:
+        error(f"Extra colons in URI {uri}")
+
+    check_call([
+        "terminator",
+        "-x",
+        "emacsclient",
+        "-t",
+    ] + linenum + [
+        uri
+    ])
+
+def main():
+    p = argparse.ArgumentParser()
+    p.add_argument('--install', action='store_true')
+    p.add_argument('uri', nargs='?')
+    args = p.parse_args()
+    if args.install:
+        install()
+    else:
+        open(args.uri)
+
+if __name__ == '__main__':
+    main()

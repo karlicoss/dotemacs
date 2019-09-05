@@ -76,6 +76,14 @@
 ;;;
 
 
+;;; org-refile
+
+(defun get-org-refile-targets ()
+  (org-files-in my/refile-targets :follow t))
+
+;;;
+
+
 ; keybindings etc
 
 (evil-global-set-key 'insert (kbd "C-t") #'my/now)

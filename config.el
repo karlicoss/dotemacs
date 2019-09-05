@@ -22,6 +22,7 @@
   (insert (format-time-string "[%Y-%m-%d %H:%M]")))
 
 
+;;; searching for things
 ; TODO need to ignore # files?
 (defun --my/helm-files-do-rg-follow (where)
   (let ((helm-ag-command-option "--follow"))
@@ -38,11 +39,22 @@
   (--my/helm-files-do-rg-follow my/code-targets))
 
 
+(defun my/prepare-swoop ()
+  "Swoop only works in open buffers apparently. So this opens all notes in buffers..."
+  (interactive)
+  (let ((files (org-files-in my/notes-targets :archive t :follow t))
+        ; adjust large file size so spacemacs doesn't prompt you for opening it in fundamental mode
+        (dotspacemacs-large-file-size (* 50 1024 1024)))
+    (-map #'find-file-read-only files)))
+
+;;;
+
+
+;;; org-drill
 (defun --my/drill-with-tag (tag)
   (require 'org-drill)
   (let ((org-drill-question-tag tag))
     (org-drill (org-files-in my/drill-targets :follow t))))
-
 
 (defun my/habits ()
   (interactive)
@@ -53,6 +65,7 @@
   (interactive)
   (--my/drill-with-tag "drill"))
 
+;;;
 
 
 
@@ -63,7 +76,9 @@
 
 (spacemacs/set-leader-keys
   "S i" #'my/search-notes
-  "S c" #'my/search-code)
+  "S c" #'my/search-code
+  "S s" #'helm-multi-swoop-all)
+
 
 
 (global-set-key (kbd "<f1>") #'my/search-notes)

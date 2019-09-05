@@ -68,6 +68,13 @@
 ;;;
 
 
+;;; org-agenda
+
+(defun get-org-agenda-files ()
+  (org-files-in my/agenda-targets :follow t))
+
+;;;
+
 
 ; keybindings etc
 

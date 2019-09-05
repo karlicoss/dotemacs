@@ -12,19 +12,26 @@
     (spacemacs/helm-files-do-rg where)))
 
 
+(defun my/search-info ()
+  (interactive)
+  (my/helm-files-do-rg-recursive my/info-search-path)) ; path defined externally
+
+
 (defun my/search-code ()
   (interactive)
-  (my/helm-files-do-rg-recursive my/code-search-path)) ; my/code-search-path defined externally
-; TODO maybe import it from this file? doesn't hurt if load twice?..
+  (my/helm-files-do-rg-recursive my/code-search-path)) ; path defined externally
 
 
 
 ; keybindings etc
 
-
-(evil-global-set-key 'insert (kbd "C-t") 'my/now)
-
+(evil-global-set-key 'insert (kbd "C-t") #'my/now)
 
 
 (spacemacs/set-leader-keys
-  "S c" 'my/search-code)
+  "S i" #'my/search-info
+  "S c" #'my/search-code)
+
+
+(global-set-key (kbd "<f1>") #'my/search-info)
+(global-set-key (kbd "<f3>") #'my/search-code)

@@ -11,7 +11,7 @@
   (let* ((patterns (if archive "-g '*.org' -g '*.org_archive'" "-g '*.org'"))
          (follows (if follow "--follow" ""))
          (rg-command (format "rg --files %s -0 %s %s" follows patterns path)))
-    (s-split "\0" (shell-command-to-string rg-command) t)))
+    (-map #'file-truename (s-split "\0" (shell-command-to-string rg-command) t))))
 
 ; helper functions
 

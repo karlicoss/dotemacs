@@ -73,6 +73,17 @@
 (defun get-org-agenda-files ()
   (org-files-in my/agenda-targets :follow t))
 
+; TODO hotkey to toggle private/non private?
+(defun my/agenda (&optional arg)
+  (interactive "P")
+  (require 'org-agenda)
+  (let ((org-agenda-tag-filter-preset '("-prv")))
+    (org-agenda arg "a")))
+
+(defun my/switch-to-agenda ()
+  (interactive)
+  (if (get-buffer "*Org Agenda*") (switch-to-buffer "*Org Agenda*") (my/agenda)))
+
 ;;;
 
 
@@ -90,6 +101,7 @@
 
 
 (spacemacs/set-leader-keys
+  "A"   #'my/switch-to-agenda
   "S i" #'my/search-notes
   "S c" #'my/search-code
   "S s" #'helm-multi-swoop-all)

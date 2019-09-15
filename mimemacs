@@ -57,7 +57,8 @@ def open(uri: str):
         "terminator",
         "-x",
         "emacsclient",
-        "-t",
+        "--tty",
+        '-a ""', # trick to run daemon if it isn't https://www.gnu.org/software/emacs/manual/html_node/emacs/emacsclient-Options.html
     ] + linenum + [
         uri
     ])

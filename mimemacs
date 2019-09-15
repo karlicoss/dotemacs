@@ -48,6 +48,7 @@ def open(uri: str):
         pass # no lnum specified
     elif len(spl) == 2:
         uri = spl[0]
+        # TODO could use that for column number? maybe an overkill though.. https://www.gnu.org/software/emacs/manual/html_node/emacs/emacsclient-Options.html 
         linenum = ["+" + spl[1]]
     else:
         error(f"Extra colons in URI {uri}")

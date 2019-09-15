@@ -53,15 +53,21 @@ def open(uri: str):
     else:
         error(f"Extra colons in URI {uri}")
 
-    check_call([
-        "terminator",
-        "-x",
+
+    ecmd = [
         "emacsclient",
         "--tty",
         '-a ""', # trick to run daemon if it isn't https://www.gnu.org/software/emacs/manual/html_node/emacs/emacsclient-Options.html
     ] + linenum + [
         uri
+    ]
+    check_call([
+        "x-terminal-emulator", # TODO not sure if it makes sense on non-debian?
+        "-e",
+        ' '.join(ecmd),
     ])
+   
+    
 
 def main():
     p = argparse.ArgumentParser()

@@ -19,7 +19,7 @@
 (defun my/now ()
   "Insert current timestamp in org-mode format"
   (interactive)
-  (insert (format-time-string "[%Y-%m-%d %H:%M]")))
+  (insert (format-time-string "[%Y-%m-%d %a %H:%M]")))
 
 
 ;;; searching for things

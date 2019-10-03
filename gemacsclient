@@ -14,6 +14,7 @@ ARGS=(
 
  # spawn new GUI window, otherwise it tries to launch client in terminal
  --create-frame 
+ -F "'(fullscreen . maximized)"
  # bring focus to the window
  -e '(select-frame-set-input-focus (selected-frame))'
 )

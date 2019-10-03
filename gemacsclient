@@ -1,0 +1,16 @@
+#!/bin/bash -eu
+
+ARGS=(
+ -a ' '                                               # tries to run emacs daemon if it's not running
+ --create-frame                                       # spawn new GUI window
+ -e '(select-frame-set-input-focus (selected-frame))' # bring focus to the window
+)
+
+
+exec emacsclient "${ARGS[@]}" \
+                 "$@"          # pass through whatever else you are trying to run
+                                                 
+
+# TODO maximize?
+# TODO wtf was that?
+#  # "(delete-other-windows)" # "(spacemacs/home)"

@@ -29,9 +29,9 @@
     (spacemacs/helm-files-do-rg where)))
 
 
-(defun my/search-notes ()
+(defun my/search ()
   (interactive)
-  (--my/helm-files-do-rg-follow my/notes-targets))
+  (--my/helm-files-do-rg-follow my/search-targets))
 
 
 (defun my/search-code ()
@@ -42,7 +42,7 @@
 (defun my/prepare-swoop ()
   "Swoop only works in open buffers apparently. So this opens all notes in buffers..."
   (interactive)
-  (let ((files (org-files-in my/notes-targets :archive t :follow t))
+  (let ((files (org-files-in my/search-targets :archive t :follow t))
         ; adjust large file size so spacemacs doesn't prompt you for opening it in fundamental mode
         (dotspacemacs-large-file-size (* 50 1024 1024)))
     (-map #'find-file-read-only files)))
@@ -102,9 +102,9 @@
 
 (spacemacs/set-leader-keys
   "A"   #'my/switch-to-agenda
-  "S i" #'my/search-notes
+  "S s" #'my/search
   "S c" #'my/search-code
-  "S s" #'helm-multi-swoop-all)
+  "S w" #'helm-multi-swoop-all)
 
 
 

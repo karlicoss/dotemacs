@@ -1,9 +1,21 @@
-#!/bin/bash -eu
+#!/bin/bash -eux
 
 ARGS=(
- -a ' '                                               # tries to run emacs daemon if it's not running
- --create-frame                                       # spawn new GUI window
- -e '(select-frame-set-input-focus (selected-frame))' # bring focus to the window
+ # Many people don't suspect it, but Emacs typically got server and client part. 
+ # As opposed to daemon (i.e. default emacs command), spawning a client (e.g. emacsclient)
+ # is extremely fast, a matter of creating a window, but that means you have to deal
+ # with having a daemon running.
+
+ # This trick gives you best of two worlds: if there is an Emacs daemon running,
+ # it just connects to it
+ # Otherwise, it spawns a daemon first and then connects to it.
+ # Without this setting if you don't have a daemon, the command would fail.
+ -a ''
+
+ # spawn new GUI window, otherwise it tries to launch client in terminal
+ --create-frame 
+ # bring focus to the window
+ -e '(select-frame-set-input-focus (selected-frame))'
 )
 
 

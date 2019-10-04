@@ -1,0 +1,4 @@
+#!/bin/bash -eu
+# TODO post blog explanation?
+# TODO eh, it might be worth a separate post...
+exec emacs --eval '(setq server-name "spacemacs-gui")' "$@"

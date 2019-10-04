@@ -104,7 +104,10 @@
   "A"   #'my/switch-to-agenda
   "S s" #'my/search
   "S c" #'my/search-code
-  "S w" #'helm-multi-swoop-all)
+  "S w" #'helm-multi-swoop-all
+
+  ; TODO link to my post?
+  "q q" #'kill-emacs)
 
 
 

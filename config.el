@@ -39,13 +39,18 @@
   (--my/helm-files-do-rg-follow my/code-targets))
 
 
+(defun --my/find-file-read-only-defensive (f)
+  "Convenient to ignore lock files and generally race conditions"
+  (with-demoted-errors
+      (find-file-read-only f)))
+
 (defun my/prepare-swoop ()
   "Swoop only works in open buffers apparently. So this opens all notes in buffers..."
   (interactive)
   (let ((files (org-files-in my/search-targets :archive t :follow t))
         ; adjust large file size so spacemacs doesn't prompt you for opening it in fundamental mode
         (dotspacemacs-large-file-size (* 50 1024 1024)))
-    (-map #'find-file-read-only files)))
+    (-map #'--my/find-file-read-only-defensive files)))
 
 ;;;
 
@@ -111,5 +116,5 @@
 
 
 
-(global-set-key (kbd "<f1>") #'my/search-notes)
+(global-set-key (kbd "<f1>") #'my/search)
 (global-set-key (kbd "<f3>") #'my/search-code)

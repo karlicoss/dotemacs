@@ -36,7 +36,7 @@
 
 (defun my/search-code ()
   (interactive)
-  (--my/helm-files-do-rg-follow my/code-targets))
+  (spacemacs/helm-files-do-rg "/" (my/code-targets)))
 
 
 (defun --my/find-file-read-only-defensive (f)

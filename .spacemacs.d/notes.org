@@ -1,0 +1,10 @@
+* older function to search org-mode files
+
+basically too slow and too inflexible in comparison to ripgrep  
+
+#+begin_src elisp
+(cl-defun org-files-in (path &key (archive nil))
+  (let ((regex (if archive "\\.\\(org\\|org\_archive\\)$" "\\.org$"))
+         (is-lockfile (lambda (s) (string-match-p "/\\.#.*" s)))
+    (remove-if is-lockfile (directory-files-recursively path regex))
+#+end_src

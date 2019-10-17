@@ -1,0 +1,83 @@
+#!/usr/bin/env python3
+import argparse
+from pathlib import Path
+import sys
+import subprocess
+from subprocess import check_call, run
+import tempfile
+
+def error(what):
+    run(["notify-send", what])
+    sys.exit(1)
+
+protocol = "emacs:"
+
+
+def install():
+    this_script = str(Path(__file__).absolute())
+    CONTENT = f"""
+[Desktop Entry]
+Name=Emacs Mime handler
+Exec={this_script} %u
+Icon=emacs-icon
+Type=Application
+Terminal=false
+MimeType=x-scheme-handler/emacs;
+""".strip()
+    with tempfile.TemporaryDirectory() as td:
+        pp = Path(td) / 'mimemacs.desktop'
+        pp.write_text(CONTENT)
+        check_call(['desktop-file-validate', str(pp)])
+        check_call([
+            'desktop-file-install',
+            '--dir', str(Path('~/.local/share/applications').expanduser()),
+            '--rebuild-mime-info-cache',
+            str(pp),
+        ])
+
+
+def open(uri: str):
+    if not uri.startswith(protocol):
+        error(f"Unexpected protocol {uri}")
+
+    uri = uri[len(protocol):]
+    spl = uri.split(':')
+
+    linenum = []
+    if len(spl) == 1:
+        pass # no lnum specified
+    elif len(spl) == 2:
+        uri = spl[0]
+        # TODO could use that for column number? maybe an overkill though.. https://www.gnu.org/software/emacs/manual/html_node/emacs/emacsclient-Options.html 
+        linenum = ["+" + spl[1]]
+    else:
+        error(f"Extra colons in URI {uri}")
+
+
+    ecmd = [
+        "emacsclient",
+        "--tty",
+        '-a ""', # trick to run daemon if it isn't https://www.gnu.org/software/emacs/manual/html_node/emacs/emacsclient-Options.html
+    ] + linenum + [
+        uri
+    ]
+    check_call([
+        "x-terminal-emulator", # TODO not sure if it makes sense on non-debian?
+        "-e",
+        ' '.join(ecmd),
+    ])
+   
+    
+
+def main():
+    p = argparse.ArgumentParser()
+    p.add_argument('--install', action='store_true')
+    p.add_argument('uri', nargs='?')
+    args = p.parse_args()
+    if args.install:
+        install()
+    else:
+        open(args.uri)
+
+if __name__ == '__main__':
+    main()

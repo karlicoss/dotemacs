@@ -25,6 +25,36 @@
       (find-file-read-only f)))
 
 
+;; TODO FIXME fucking hell, elisp doesn't seem to have anything similar to e.g. check_call in python
+;; also no simple way to pass set -eu -o pipefail
+;; so, if find or xargs fails, you'd get with garbage in the variable
+
+;; really wish there was some sort of bridge for configuring emacs on other programming languages
+;; there is zero benefit of using Elisp for most of typical emacs configs; only obstacles.
+;; can't say about other lisps, but very likely it's not very beneficial either
+
+(defun --my/git-repos-refresh ()
+  (let ((search-git-repos-cmd (s-concat
+                               "find " (format "'%s'" my/git-repos-search-root) " -iname '.git' -printf '%h\\0' "
+                               "| xargs -0 readlink -f "
+                               "| sort")))
+    (progn
+      (message "refreshing git repos...")
+      (defconst *--my/git-repos*
+        (s-split "\n" (shell-command-to-string search-git-repos-cmd) t))))) ; t for omit-nulls
+
+
+(defun my/code-targets ()
+  "Collect repositories across the filesystem and bootstrap the timer to update them"
+  ; TODO there mustbe some generic caching mechanism for that in elisp?
+  (let ((refresh-interval-seconds (* 60 5)))
+    (progn
+      (unless (boundp '*--my/git-repos*)
+        (--my/git-repos-refresh)
+        (run-with-idle-timer refresh-interval-seconds t '--my/git-repos-refresh))
+      *--my/git-repos*)))
+
+
 (defun my/search ()
   (interactive)
   (--my/helm-files-do-rg-follow my/search-targets))

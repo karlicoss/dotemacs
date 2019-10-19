@@ -1,5 +1,15 @@
 ; refined init.el, gradually will mode all of my config here
 
+;;; random helpers
+
+; TODO should this be macro??
+(cl-defun with-error-on-user-prompt (body)
+  "Useful when we want to avoid prompts"
+  (interactive)
+  (cl-letf (((symbol-function 'y-or-n-p) (lambda (arg) (error "IGNORING PROMPT %s" arg))))
+    (eval body)))
+;;;
+
 
 ;;; searching for things
 (cl-defun my/files-in (path &key (exts nil) (follow nil))
@@ -19,10 +29,10 @@
     (spacemacs/helm-files-do-rg where)))
 
 
-(defun --my/find-file-read-only-defensive (f)
-  "Convenient to ignore lock files and generally race conditions"
-  (with-demoted-errors
-      (find-file-read-only f)))
+(defun --my/find-file-defensive (f)
+  "Convenient to ignore lock files, generally race conditions and userp prompts"
+  "returns filename if successful, othewise nil"
+  (ignore-errors (with-error-on-user-prompt `(find-file-read-only f)) f))
 
 
 ;; TODO FIXME fucking hell, elisp doesn't seem to have anything similar to e.g. check_call in python
@@ -65,22 +75,28 @@
   (spacemacs/helm-files-do-rg "/" (my/code-targets)))
 
 
+; TODO perhaps split window and display some sort of progress?
 (defun my/prepare-swoop ()
   "Swoop only works in open buffers apparently. So this opens all files in buffers..."
-  (let ((time (current-time))
-        (files (my/files-in my/search-targets
-                            :follow t
-                            :exts '(
-                                    "org" "org_archive"
-                                    "txt"
-                                    "page" "md" "markdown"))) ; older Markdown/gitit notes
-        ; disable local variables, mainly so nothing prompts while opening org files with babel
-        (enable-local-variables nil)
-        (enable-local-eval nil)
-        ; adjust large file size so spacemacs doesn't prompt you for opening it in fundamental mode
-        (dotspacemacs-large-file-size (* 50 1024 1024)))
-    (-map #'--my/find-file-read-only-defensive files)
-    (message "prepare-swoop took %.1f seconds" (float-time (time-since time)))))
+  (let* ((time (current-time))
+         (files (my/files-in my/search-targets
+                             :follow t
+                             :exts '(
+                                     "org" "org_archive"
+                                     "txt"
+                                     "page" "md" "markdown"))) ; older Markdown/gitit notes
+                                        ; disable local variables, mainly so nothing prompts while opening org files with babel
+         (enable-local-variables nil)
+         (enable-local-eval nil)
+                                        ; adjust large file size so spacemacs doesn't prompt you for opening it in fundamental mode
+         (dotspacemacs-large-file-size (* 50 1024 1024))
+         (with-errors (-remove '--my/find-file-defensive files)))
+    (setq swoop-stats-buf (generate-new-buffer "*swoop-stats*"))
+    (with-current-buffer swoop-stats-buf
+      (insert (format "prepare-swoop took %.1f seconds!\nErrors while loading:\n%s"
+                      (float-time (time-since time))
+                      (s-join "\n" with-errors)))
+      (switch-to-buffer swoop-stats-buf))))
 
 ;;;
 

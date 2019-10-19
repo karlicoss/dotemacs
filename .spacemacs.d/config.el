@@ -90,13 +90,19 @@
          (enable-local-eval nil)
                                         ; adjust large file size so spacemacs doesn't prompt you for opening it in fundamental mode
          (dotspacemacs-large-file-size (* 50 1024 1024))
-         (with-errors (-remove '--my/find-file-defensive files)))
+         (with-errors (-remove '--my/find-file-defensive files))
+         (buf-sizes (-sort (lambda (a b) (> (car a) (car b)))
+                           (-map (lambda (b) (with-current-buffer b `(,(buffer-size) ,(buffer-file-name))))
+                                 (buffer-list)))))
+    ; TODO eh, maybe I need to refactor it so it's clear what's important and what isn't...
     (setq swoop-stats-buf (generate-new-buffer "*swoop-stats*"))
     (with-current-buffer swoop-stats-buf
-      (insert (format "prepare-swoop took %.1f seconds!\nErrors while loading:\n%s"
+      (insert (format "prepare-swoop took %.1f seconds!\nErrors while loading:\n%s\nBuffers opened:\n%s"
                       (float-time (time-since time))
-                      (s-join "\n" with-errors)))
-      (switch-to-buffer swoop-stats-buf))))
+                      (s-join "\n" with-errors)
+                      (s-join "\n" (-map (lambda (l) (format "%d %s" (car l) (cdr l))) buf-sizes))))
+      (switch-to-buffer swoop-stats-buf)
+      (beginning-of-buffer))))
 
 ;;;
 

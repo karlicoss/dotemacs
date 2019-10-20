@@ -24,8 +24,9 @@
 
 
 ; TODO need to ignore # files?
-(cl-defun --my/helm-files-do-rg (dir &key (targets nil) (extra-opts nil))
-  (let ((helm-ag-command-option (s-join " " extra-opts)))
+(cl-defun --my/helm-files-do-rg (dir &key (targets nil) (rg-opts nil))
+  (require 'helm-ag)
+  (let ((helm-ag-command-option (s-join " " rg-opts)))
     ;; NOTE: spacemacs/helm-files-do-rg is patched to support second argument with multiple directories
     ;; (see patch-helm.el)
     (spacemacs/helm-files-do-rg dir targets)))
@@ -71,16 +72,62 @@
       *--my/git-repos*)))
 
 
+
+;; I only want helm follow when I run helm-ag against my notes,
+;; but not all the time, in particular when I'm running my/search-code because it
+;; triggers loading LSP etc
+;; Problem is helm-follow-mode seems to be handled on per-source basis
+;; and there is some logic that tries to persist it in customize-variables
+;; for future emacs sessions.
+;; helm-ag on one hand seems to use since source (helm-ag-source) for all searches
+;; on the orther hand it does some sort of dynamic renaming and messing with source names
+;; (e.g. search by "helm-attrset 'name")
+;; As a result it's very unclear what's actually happening even after few hours of debugging.
+;; also see https://github.com/emacs-helm/helm/issues/2006,
+
+;; other things I tried (apart from completely random desperate attempts)
+;; - setting
+;;   (setq helm-follow-mode-persistent t)
+;;   (setq helm-source-names-using-follow `(,(helm-ag--helm-header my/search-targets))))
+;; - using different source similar to helm-ag-source, but with :follow t -- doesn't work :shrug:
+
+;; in the end I ended up hacking hooks to enable follow mode for specific helm call
+;; and disabling on closing the buffer. Can't say I like it at all and looks sort of flaky.
+
+
+(defun --my/helm-follow-mode-set (arg)
+  "Ugh fucking hell. Need this because helm-follow-mode works as a toggle :eyeroll:"
+  (unless (eq (helm-follow-mode-p) arg)
+    (helm-follow-mode)))
+
+
+;; TODO FIXME use defmacro?
+(defun --my/one-off-helm-follow-mode ()
+  (defun --my/enable-helm-follow-mode ()
+    (--my/helm-follow-mode-set t))
+
+  (defun --my/disable-helm-follow-mode ()
+    (--my/helm-follow-mode-set nil)
+    (remove-hook 'helm-after-update-hook '--my/enable-helm-follow-mode)
+    (remove-hook 'helm-cleanup-hook '--my/disable-helm-follow-mode))
+
+  ;; ugh, after-update doesn seem like the right hook since it's triggered on typing
+  ;; but I haven't found anything better, e.g. after-initialize-hook seems too early
+  ;; as helm complains at 'Not enough candidates' :(
+  (add-hook 'helm-after-update-hook '--my/enable-helm-follow-mode)
+  (add-hook 'helm-cleanup-hook '--my/disable-helm-follow-mode))
+
 (defun my/search ()
   (interactive)
-  (--my/helm-files-do-rg my/search-targets :extra-opts '("--follow")))
-
+  (--my/one-off-helm-follow-mode)
+  (--my/helm-files-do-rg my/search-targets
+                         :rg-opts '("--follow")))
 
 (defun my/search-code ()
   (interactive)
   (--my/helm-files-do-rg "/"
                          :targets (my/code-targets)
-                         :extra-opts '("-T" "txt" "-T" "md" "-T" "html" "-T" "org" "-g" "!*.org_archive")))
+                         :rg-opts '("-T" "txt" "-T" "md" "-T" "html" "-T" "org" "-g" "!*.org_archive")))
 
 
 ; TODO perhaps split window and display some sort of progress?

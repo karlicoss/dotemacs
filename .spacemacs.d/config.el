@@ -162,6 +162,12 @@
 
 ;;; keybindings etc
 
+; TODO with-eval-after-loaded agenda???
+(defun --my/org-agenda-postpone (arg days)
+  (interactive "P")
+  (org-agenda-schedule arg (format "+%dd" days)))
+
+
 (evil-global-set-key 'insert (kbd "C-t") #'my/now)
 
 

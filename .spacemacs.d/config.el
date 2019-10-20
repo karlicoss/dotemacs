@@ -44,14 +44,18 @@
 ;; can't say about other lisps, but very likely it's not very beneficial either
 
 (defun --my/git-repos-refresh ()
-  (let ((search-git-repos-cmd (s-concat
-                               "find " (format "'%s'" my/git-repos-search-root) " -iname '.git' -printf '%h\\0' "
-                               "| xargs -0 readlink -f "
-                               "| sort")))
+  (let ((search-git-repos-cmd (s-join " "
+                                      `(
+                                        "fdfind"
+                                        "--follow" ; follow symlink
+                                        "--hidden" "--type d" "'.git$'" ; match git dirs
+                                        ,(format "'%s'" my/git-repos-search-root)
+                                        "-x" "readlink" "-f" "'{//}'")))) ; resolve symlinks
     (progn
       (message "refreshing git repos...")
       (defconst *--my/git-repos*
-        (s-split "\n" (shell-command-to-string search-git-repos-cmd) t))))) ; t for omit-nulls
+        (-distinct (s-split "\n" ; remove duplicates due to symlinking
+                            (shell-command-to-string search-git-repos-cmd) t)))))) ; t for omit-nulls
 
 
 (defun my/code-targets ()
@@ -72,6 +76,8 @@
 
 (defun my/search-code ()
   (interactive)
+  ;; NOTE: spacemacs/helm-files-do-rg is patched to support second argument with multiple directories
+  ;; (see patch-helm.el)
   (spacemacs/helm-files-do-rg "/" (my/code-targets)))
 
 

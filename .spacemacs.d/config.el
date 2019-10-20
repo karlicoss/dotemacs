@@ -101,21 +101,22 @@
     (helm-follow-mode)))
 
 
-;; TODO FIXME use defmacro?
 (defun --my/one-off-helm-follow-mode ()
   (defun --my/enable-helm-follow-mode ()
     (--my/helm-follow-mode-set t))
 
   (defun --my/disable-helm-follow-mode ()
     (--my/helm-follow-mode-set nil)
-    (remove-hook 'helm-after-update-hook '--my/enable-helm-follow-mode)
+    (remove-hook 'helm-move-selection-before-hook '--my/enable-helm-follow-mode)
     (remove-hook 'helm-cleanup-hook '--my/disable-helm-follow-mode))
 
-  ;; ugh, after-update doesn seem like the right hook since it's triggered on typing
-  ;; but I haven't found anything better, e.g. after-initialize-hook seems too early
+  ;; ugh, helm-move-selection-before-hook doesn seem like the right one frankly
+  ;; but I haven't found anything better, e.g. helm-after-initialize-hook seems too early
+  ;; helm-after-update-hook kinda worked, but immediately dropped after presenting results
   ;; as helm complains at 'Not enough candidates' :(
-  (add-hook 'helm-after-update-hook '--my/enable-helm-follow-mode)
+  (add-hook 'helm-move-selection-before-hook '--my/enable-helm-follow-mode)
   (add-hook 'helm-cleanup-hook '--my/disable-helm-follow-mode))
+
 
 (defun my/search ()
   (interactive)

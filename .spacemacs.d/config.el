@@ -162,10 +162,22 @@
 
 ;;; keybindings etc
 
-; TODO with-eval-after-loaded agenda???
-(defun --my/org-agenda-postpone (arg days)
-  (interactive "P")
-  (org-agenda-schedule arg (format "+%dd" days)))
+(defun --my/org-agenda-postpone (days)
+  (interactive)
+  (org-agenda-schedule nil (format "+%dd" days)))
+
+;; TODO not sure what's the difference between org-defkey and other methods of binding...
+;; https://lists.gnu.org/archive/html/emacs-orgmode/2011-02/msg00260.html
+
+(with-eval-after-load 'org-agenda
+  (loop for days from 0 to 9
+        do (org-defkey
+             org-agenda-mode-map
+             (format "%d" days)
+             `(lambda ()
+                ,(format "Schedule %d days later" days)
+                (interactive)
+                (--my/org-agenda-postpone ,days)))))
 
 
 (evil-global-set-key 'insert (kbd "C-t") #'my/now)

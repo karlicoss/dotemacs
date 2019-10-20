@@ -8,3 +8,17 @@ basically too slow and too inflexible in comparison to ripgrep
          (is-lockfile (lambda (s) (string-match-p "/\\.#.*" s)))
     (remove-if is-lockfile (directory-files-recursively path regex))
 #+end_src
+
+
+* [2019-10-20 Sun 17:40] attempt to fix unnamed bindings...
+ugh. didn't really work
+
+#+begin_src elisp
+
+  (loop for days from 0 to 9
+        do (progn
+             `(defun ,(intern (format "postpone-by-%d" days)) ()
+               (interactive)
+               (--my/org-agenda-postpone days))
+             (org-defkey org-agenda-mode-map (format "%d" days) 'postpone-by-1)))
+#+end_src

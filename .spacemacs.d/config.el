@@ -24,9 +24,11 @@
 
 
 ; TODO need to ignore # files?
-(defun --my/helm-files-do-rg-follow (where)
-  (let ((helm-ag-command-option "--follow"))
-    (spacemacs/helm-files-do-rg where)))
+(cl-defun --my/helm-files-do-rg (dir &key (targets nil) (extra-opts nil))
+  (let ((helm-ag-command-option (s-join " " extra-opts)))
+    ;; NOTE: spacemacs/helm-files-do-rg is patched to support second argument with multiple directories
+    ;; (see patch-helm.el)
+    (spacemacs/helm-files-do-rg dir targets)))
 
 
 (defun --my/find-file-defensive (f)
@@ -71,14 +73,14 @@
 
 (defun my/search ()
   (interactive)
-  (--my/helm-files-do-rg-follow my/search-targets))
+  (--my/helm-files-do-rg my/search-targets :extra-opts '("--follow")))
 
 
 (defun my/search-code ()
   (interactive)
-  ;; NOTE: spacemacs/helm-files-do-rg is patched to support second argument with multiple directories
-  ;; (see patch-helm.el)
-  (spacemacs/helm-files-do-rg "/" (my/code-targets)))
+  (--my/helm-files-do-rg "/"
+                         :targets (my/code-targets)
+                         :extra-opts '("-T" "txt" "-T" "md" "-T" "html" "-T" "org" "-g" "!*.org_archive")))
 
 
 ; TODO perhaps split window and display some sort of progress?

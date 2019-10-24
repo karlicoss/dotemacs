@@ -207,6 +207,12 @@
 
 ;;;
 
+;;; misc org stuff
+
+(with-eval-after-load 'org
+  (load-file "~/dotfiles-emacs/babel-mypy.el"))
+
+;;;
 
 ;;; misc stuff
 (defun my/now ()
@@ -214,6 +220,7 @@
   (interactive)
   (insert (format-time-string "[%Y-%m-%d %a %H:%M]")))
 ;;;
+
 
 
 ;;; keybindings etc

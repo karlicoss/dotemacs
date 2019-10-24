@@ -1,0 +1,30 @@
+(setq --babel-mypy/exec-python "
+output=$(python3 $tfile 2>&1)
+res=$?
+echo \"Python output [exit code $res]:\"
+echo $output
+")
+
+
+(setq --babel-mypy/exec-mypy "
+MYPYPATH=/L/tmp/result/  # TODO ugh, just need to touch py.typed..
+output=$(python3 -m mypy --show-error-codes --strict $tfile 2>&1)
+res=$?
+echo \"Mypy output [exit code $res]:\"
+echo $output
+")
+
+(setq --babel-mypy/exec-preamble "
+tfile=$(mktemp)
+cp /dev/stdin $tfile
+")
+
+;; see https://code.orgmode.org/bzg/worg/raw/master/org-contrib/babel/ob-template.el
+(defun org-babel-execute:mypy (body params)
+  (let* ((execute (assoc-default :eval params))
+         (parts (if execute `(,--babel-mypy/exec-python ,--babel-mypy/exec-mypy) `(,--babel-mypy/exec-mypy)))
+         (cmd (string-join (cons --babel-mypy/exec-preamble parts))))
+    (org-babel-eval cmd body)))
+
+;; TODO wonder if tangle helps with highlighting in emacs?
+;; (add-to-list 'org-babel-tangle-lang-exts '("mypy" . "py"))

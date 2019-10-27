@@ -1,6 +1,8 @@
 (setq --babel-mypy/exec-python "
 output=$(python3 $tfile 2>&1)
 res=$?
+output=$(echo $output | sed \"$sed_command\")
+
 echo \"Python output [exit code $res]:\"
 echo $output
 ")
@@ -8,8 +10,11 @@ echo $output
 
 (setq --babel-mypy/exec-mypy "
 MYPYPATH=/L/tmp/result/  # TODO ugh, just need to touch py.typed..
+
 output=$(python3 -m mypy --show-error-codes --strict $tfile 2>&1)
 res=$?
+output=$(echo $output | sed \"$sed_command\")
+
 echo \"Mypy output [exit code $res]:\"
 echo $output
 ")
@@ -17,6 +22,7 @@ echo $output
 (setq --babel-mypy/exec-preamble "
 tfile=$(mktemp)
 cp /dev/stdin $tfile
+sed_command=\"s#$tfile#input.py#g\" # need to replace tmp directory for deterministic output
 ")
 
 ;; see https://code.orgmode.org/bzg/worg/raw/master/org-contrib/babel/ob-template.el

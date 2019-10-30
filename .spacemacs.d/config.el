@@ -1,4 +1,5 @@
 ; refined init.el, gradually will mode all of my config here
+; loaded in dotspacemacs/user-config
 
 ;;; random helpers
 
@@ -248,8 +249,18 @@
 
 (spacemacs/set-leader-keys
   "A"   #'my/switch-to-agenda
+
   "S s" #'my/search
   "S c" #'my/search-code
+
+  ;; TODO shit! configure other engines as well
+  ;; lets you enger an interactive query
+  "s G" #'engine/search-google
+
+  ;; TODO extract search-hotkeys so it's easy to extract for the post?
+  "p P" #'helm-projectile-find-file-in-known-projects
+
+  ;; TODO don't need it anymore?
   "S w" #'helm-multi-swoop-all
 
   ; TODO link to my post?

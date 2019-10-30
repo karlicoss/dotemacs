@@ -1,7 +1,7 @@
 ; -*- mode: Lisp; paredit-mode: 0; -*-
 
 
-; need to pass down 'targets' argument
+; reason for patching: need to pass down 'targets' argument
 ; TODO commit it to spacemacs?
 (el-patch-feature helm)
 (with-eval-after-load 'helm

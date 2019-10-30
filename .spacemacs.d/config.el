@@ -24,6 +24,12 @@
   (my/files-in path :exts (if archive '("org" "org_archive") '("org")) :follow follow))
 
 
+
+(with-eval-after-load 'helm
+  ;; patch spacemacs/helm-files-do-rg to support extra targets argument used in --my/helm-files-do-rg
+  (load-file "~/dotfiles-emacs/patch-helm.el"))
+
+
 ; TODO need to ignore # files?
 (cl-defun --my/helm-files-do-rg (dir &key (targets nil) (rg-opts nil))
   (require 'helm-ag)
@@ -161,6 +167,12 @@
       (switch-to-buffer swoop-stats-buf)
       (beginning-of-buffer))))
 
+
+
+(with-eval-after-load 'helm-ag
+  ;; see helm-ag--construct-command. Not configurable otherwise ATM
+  (defun helm-ag--construct-ignore-option (pattern)
+    (concat "--glob=!" pattern)))
 ;;;
 
 

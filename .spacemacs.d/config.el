@@ -203,10 +203,12 @@
 (defun my/agenda (&optional arg)
   (interactive "P")
   (require 'org-agenda)
-  (let ((org-agenda-tag-filter-preset '("-prv")))
+  (let ((org-agenda-tag-filter-preset '("-prv"))
+        (org-agenda-window-setup 'only-window))
     (org-agenda arg "a")))
 
 (defun my/switch-to-agenda ()
+  "launch agenda unless it's already running"
   (interactive)
   (if (get-buffer "*Org Agenda*") (switch-to-buffer "*Org Agenda*") (my/agenda)))
 

@@ -258,12 +258,20 @@
                 (--my/org-agenda-postpone ,days)))))
 
 
-(evil-global-set-key 'insert (kbd "C-t") #'my/now)
+(with-eval-after-load 'evil
+  (evil-global-set-key 'insert (kbd "C-t") #'my/now)
+
+  (evil-leader/set-key-for-mode 'org-mode
+    ">" #'org-demote-subtree
+    "<" #'org-promote-subtree
+    "," #'my/org-comment))
 
 
 (spacemacs/set-leader-keys
   "A"   #'my/switch-to-agenda
 
+
+  "RET" #'helm-swoop
   "S s" #'my/search
   "S c" #'my/search-code
 

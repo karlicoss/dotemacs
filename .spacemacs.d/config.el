@@ -5,7 +5,7 @@
 
 ; TODO should this be macro??
 (cl-defun with-error-on-user-prompt (body)
-  "Useful when we want to avoid prompts"
+  "Suppress user prompt and throw error instead. Useful when we really want to avoid prompts, e.g. in non-interactive functions"
   (interactive)
   (cl-letf (((symbol-function 'y-or-n-p) (lambda (arg) (error "IGNORING PROMPT %s" arg))))
     (eval body)))
@@ -14,9 +14,12 @@
 
 ;;; searching for things
 (cl-defun my/files-in (path &key (exts nil) (follow nil))
-  "This is a bit horrible, but none of standard Elisp functions or popular libs support following symlink :("
+  "Search for files with certail extensions and potentially following symlinks.
+   None of standard Elisp functions or popular libs support following symlink :(
+   In addition, rg is ridiculously fast."
   (let* ((patterns (s-join " " (-map (lambda (i) (format "-g '*.%s'" i)) exts)))
          (follows (if follow "--follow" ""))
+         ;; TODO use fd maybe?
          (rg-command (format "rg --files %s -0 %s %s" follows patterns path)))
     (-map #'file-truename (s-split "\0" (shell-command-to-string rg-command) t))))
 
@@ -30,9 +33,10 @@
   (load-file "~/dotfiles-emacs/patch-helm.el"))
 
 
-; TODO need to ignore # files?
 (cl-defun --my/helm-files-do-rg (dir &key (targets nil) (rg-opts nil))
+  "Helper function to aid with passing extra arguments to ripgrep"
   (require 'helm-ag)
+  ;; TODO need to ignore # files?
   (let ((helm-ag-command-option (s-join " " rg-opts)))
     ;; NOTE: spacemacs/helm-files-do-rg is patched to support second argument with multiple directories
     ;; (see patch-helm.el)
@@ -40,8 +44,8 @@
 
 
 (defun --my/find-file-defensive (f)
-  "Convenient to ignore lock files, generally race conditions and userp prompts"
-  "returns filename if successful, othewise nil"
+  "Open file, ignoring lock files, various IO race conditions and user prompts.
+   Returns filename if successful, othewise nil"
   (ignore-errors (with-error-on-user-prompt `(find-file-read-only f)) f))
 
 
@@ -69,7 +73,7 @@
 
 
 (defun my/code-targets ()
-  "Collect repositories across the filesystem and bootstrap the timer to update them"
+  "Collects repositories across the filesystem and bootstraps the timer to update them"
   ; TODO there mustbe some generic caching mechanism for that in elisp?
   (let ((refresh-interval-seconds (* 60 5)))
     (progn
@@ -80,6 +84,7 @@
 
 
 
+(defun --my/one-off-helm-follow-mode ()
 ;; I only want helm follow when I run helm-ag against my notes,
 ;; but not all the time, in particular when I'm running my/search-code because it
 ;; triggers loading LSP etc
@@ -101,14 +106,11 @@
 ;; in the end I ended up hacking hooks to enable follow mode for specific helm call
 ;; and disabling on closing the buffer. Can't say I like it at all and looks sort of flaky.
 
+  (defun --my/helm-follow-mode-set (arg)
+    "Ugh fucking hell. Need this because helm-follow-mode works as a toggle :eyeroll:"
+    (unless (eq (helm-follow-mode-p) arg)
+      (helm-follow-mode)))
 
-(defun --my/helm-follow-mode-set (arg)
-  "Ugh fucking hell. Need this because helm-follow-mode works as a toggle :eyeroll:"
-  (unless (eq (helm-follow-mode-p) arg)
-    (helm-follow-mode)))
-
-
-(defun --my/one-off-helm-follow-mode ()
   (defun --my/enable-helm-follow-mode ()
     (--my/helm-follow-mode-set t))
 
@@ -136,37 +138,6 @@
   (--my/helm-files-do-rg "/"
                          :targets (my/code-targets)
                          :rg-opts '("-T" "txt" "-T" "md" "-T" "html" "-T" "org" "-g" "!*.org_archive")))
-
-
-; TODO perhaps split window and display some sort of progress?
-(defun my/prepare-swoop ()
-  "Swoop only works in open buffers apparently. So this opens all files in buffers..."
-  (let* ((time (current-time))
-         (files (my/files-in my/search-targets
-                             :follow t
-                             :exts '(
-                                     "org" "org_archive"
-                                     "txt"
-                                     "page" "md" "markdown"))) ; older Markdown/gitit notes
-                                        ; disable local variables, mainly so nothing prompts while opening org files with babel
-         (enable-local-variables nil)
-         (enable-local-eval nil)
-                                        ; adjust large file size so spacemacs doesn't prompt you for opening it in fundamental mode
-         (dotspacemacs-large-file-size (* 50 1024 1024))
-         (with-errors (-remove '--my/find-file-defensive files))
-         (buf-sizes (-sort (lambda (a b) (> (car a) (car b)))
-                           (-map (lambda (b) (with-current-buffer b `(,(buffer-size) ,(buffer-file-name))))
-                                 (buffer-list)))))
-    ; TODO eh, maybe I need to refactor it so it's clear what's important and what isn't...
-    (setq swoop-stats-buf (generate-new-buffer "*swoop-stats*"))
-    (with-current-buffer swoop-stats-buf
-      (insert (format "prepare-swoop took %.1f seconds!\nErrors while loading:\n%s\nBuffers opened:\n%s"
-                      (float-time (time-since time))
-                      (s-join "\n" with-errors)
-                      (s-join "\n" (-map (lambda (l) (format "%d %s" (car l) (cdr l))) buf-sizes))))
-      (switch-to-buffer swoop-stats-buf)
-      (beginning-of-buffer))))
-
 
 
 (with-eval-after-load 'helm-ag
@@ -281,9 +252,6 @@
 
   ;; TODO extract search-hotkeys so it's easy to extract for the post?
   "p P" #'helm-projectile-find-file-in-known-projects
-
-  ;; TODO don't need it anymore?
-  "S w" #'helm-multi-swoop-all
 
   ; TODO link to my post?
   "q q" #'kill-emacs)

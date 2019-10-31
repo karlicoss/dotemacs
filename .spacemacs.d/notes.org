@@ -22,3 +22,40 @@ ugh. didn't really work
                (--my/org-agenda-postpone days))
              (org-defkey org-agenda-mode-map (format "%d" days) 'postpone-by-1)))
 #+end_src
+
+
+* [2019-10-31 Thu 18:56] old prepare-swoop
+
+#+begin_src elisp
+  ; TODO perhaps split window and display some sort of progress?
+  (defun my/prepare-swoop ()
+    "Swoop only works in open buffers apparently. So this opens all files in buffers..."
+    (let* ((time (current-time))
+           (files (my/files-in my/search-targets
+                               :follow t
+                               :exts '(
+                                       "org" "org_archive"
+                                       "txt"
+                                       "page" "md" "markdown"))) ; older Markdown/gitit notes
+                                          ; disable local variables, mainly so nothing prompts while opening org files with babel
+           (enable-local-variables nil)
+           (enable-local-eval nil)
+                                          ; adjust large file size so spacemacs doesn't prompt you for opening it in fundamental mode
+           (dotspacemacs-large-file-size (* 50 1024 1024))
+           (with-errors (-remove '--my/find-file-defensive files))
+           (buf-sizes (-sort (lambda (a b) (> (car a) (car b)))
+                             (-map (lambda (b) (with-current-buffer b `(,(buffer-size) ,(buffer-file-name))))
+                                   (buffer-list)))))
+      ; TODO eh, maybe I need to refactor it so it's clear what's important and what isn't...
+      (setq swoop-stats-buf (generate-new-buffer "*swoop-stats*"))
+      (with-current-buffer swoop-stats-buf
+        (insert (format "prepare-swoop took %.1f seconds!\nErrors while loading:\n%s\nBuffers opened:\n%s"
+                        (float-time (time-since time))
+                        (s-join "\n" with-errors)
+                        (s-join "\n" (-map (lambda (l) (format "%d %s" (car l) (cdr l))) buf-sizes))))
+        (switch-to-buffer swoop-stats-buf)
+        (beginning-of-buffer))))
+
+
+
+#+end_src

@@ -62,14 +62,17 @@
                                       `(
                                         "fdfind"
                                         "--follow" ; follow symlink
-                                        "--hidden" "--type d" "'.git$'" ; match git dirs
+                                        ;; match git dirs, excluding bare repositories (they don't have index)
+                                        "--hidden" "--full-path" "--type f" "'.git/index$'"
                                         ,(format "'%s'" my/git-repos-search-root)
-                                        "-x" "readlink" "-f" "'{//}'")))) ; resolve symlinks
+                                        "-x" "readlink" "-f" "'{//}'")))) ; resolve symlinks and chop off 'index'
     (progn
       (message "refreshing git repos...")
       (defconst *--my/git-repos*
-        (-distinct (s-split "\n" ; remove duplicates due to symlinking
-                            (shell-command-to-string search-git-repos-cmd) t)))))) ; t for omit-nulls
+        (-distinct
+         (-map (lambda (x) (s-chop-suffix "/.git" x))
+               (s-split "\n" ; remove duplicates due to symlinking
+                        (shell-command-to-string search-git-repos-cmd) t))))))) ; t for omit-nulls
 
 
 (defun my/code-targets ()

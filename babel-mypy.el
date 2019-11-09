@@ -28,7 +28,7 @@ sed_command=\"s#$tfile#input.py#g\" # need to replace tmp directory for determin
 ;; see https://code.orgmode.org/bzg/worg/raw/master/org-contrib/babel/ob-template.el
 (defun org-babel-execute:mypy (body params)
   (let* ((execute (assoc-default :eval params))
-         (parts (if execute `(,--babel-mypy/exec-python ,--babel-mypy/exec-mypy) `(,--babel-mypy/exec-mypy)))
+         (parts (if execute `(,--babel-mypy/exec-python "echo" ,--babel-mypy/exec-mypy) `(,--babel-mypy/exec-mypy)))
          (cmd (string-join (cons --babel-mypy/exec-preamble parts))))
     (org-babel-eval cmd body)))
 

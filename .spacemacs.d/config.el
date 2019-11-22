@@ -12,6 +12,21 @@
 ;;;
 
 
+; omg why is elisp so shit...
+(defun my/get-output (cmd)
+  "shell-command-to-string mixes stderr and stdout, so we can't rely on it for getting filenames etc..
+   It also ignores exit code.
+   (see https://github.com/emacs-mirror/emacs/blob/b7d4c5d1d1b55fea8382663f18263e2000678be5/lisp/simple.el#L3569-L3573)
+
+   This function ignores stderr for now since I haven't figured out how to redirect it to *Messages* buffer :("
+  (with-output-to-string
+    (with-temp-buffer
+      (shell-command
+       cmd
+       standard-output
+       (current-buffer)))))
+
+
 ;;; searching for things
 (cl-defun my/files-in (path &key (exts nil) (follow nil))
   "Search for files with certail extensions and potentially following symlinks.

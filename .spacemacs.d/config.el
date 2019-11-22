@@ -213,6 +213,16 @@
 (defun get-org-refile-targets ()
   (my/org-files-in my/refile-targets :follow t))
 
+(with-eval-after-load 'org
+  ;; https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html
+  (setq org-refile-use-cache t)
+  (setq org-refile-use-outline-path 'buffer-name) ; otherwise you can't create a top level heading
+  (setq org-outline-path-complete-in-steps nil) ; otherwise you ONLY can create a top level heading!
+
+  ;; https://emacs.stackexchange.com/a/37610/19521
+  (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
+  (setq uniquify-strip-common-suffix nil))
+
 ;;;
 
 ;;; misc org stuff

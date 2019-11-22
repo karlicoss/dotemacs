@@ -32,11 +32,15 @@
   "Search for files with certail extensions and potentially following symlinks.
    None of standard Elisp functions or popular libs support following symlink :(
    In addition, rg is ridiculously fast."
-  (let* ((patterns (s-join " " (-map (lambda (i) (format "-g '*.%s'" i)) exts)))
+  (let* ((patterns (s-join " " (-map (lambda (i) (format "-e %s" i)) exts)))
          (follows (if follow "--follow" ""))
-         ;; TODO use fd maybe?
-         (rg-command (format "rg --files %s -0 %s %s" follows patterns path)))
-    (-map #'file-truename (s-split "\0" (shell-command-to-string rg-command) t))))
+         (rg-command (format
+                      "fdfind . %s %s %s -x readlink -f --zero"
+                      follows
+                      patterns
+                      path))
+         (filenames (s-split "\0" (shell-command-to-string rg-command) t)))
+    (-map #'file-truename filenames)))
 
 (cl-defun my/org-files-in (path &key (archive nil) (follow nil))
   (my/files-in path :exts (if archive '("org" "org_archive") '("org")) :follow follow))

@@ -35,11 +35,11 @@
   (let* ((patterns (s-join " " (-map (lambda (i) (format "-e %s" i)) exts)))
          (follows (if follow "--follow" ""))
          (rg-command (format
-                      "fdfind . %s %s %s -x readlink -f --zero"
+                      "fdfind . %s %s %s -x readlink -f" ; ugh, --zero isn't supported on alpine (cloudmacs)
                       follows
                       patterns
                       path))
-         (filenames (s-split "\0" (shell-command-to-string rg-command) t)))
+         (filenames (s-split "\n" (shell-command-to-string rg-command) t)))
     (-map #'file-truename filenames)))
 
 (cl-defun my/org-files-in (path &key (archive nil) (follow nil))

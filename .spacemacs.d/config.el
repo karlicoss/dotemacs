@@ -232,6 +232,13 @@
 
 ;;;
 
+
+;;; org-drill
+(with-eval-after-load 'org-drill
+  (setq org-drill-pronounce-command nil)) ; disable creepy pronouncing
+
+;;;
+
 ;;; misc stuff
 (defun my/now ()
   "Insert current timestamp in org-mode format"

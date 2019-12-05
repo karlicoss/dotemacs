@@ -184,6 +184,8 @@
   (interactive)
   (--my/drill-with-tag "drill"))
 
+;; TODO FIXME need separate resumes?
+
 ;;;
 
 
@@ -246,6 +248,10 @@
   (insert (format-time-string "[%Y-%m-%d %a %H:%M]")))
 ;;;
 
+
+
+(with-eval-after-load 'python
+  (load-file "~/dotfiles-emacs/lang/python.el"))
 
 
 ;;; keybindings etc

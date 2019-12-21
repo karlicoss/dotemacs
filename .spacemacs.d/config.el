@@ -237,7 +237,36 @@
 
 ;;; misc org stuff
 
+
 (with-eval-after-load 'org
+  ;; TODO eh, should probably reuse  org-insert-heading-after-current ?
+  (defun my/org-quicknote ()
+    """
+    Inserts child heading with an inactive timestamp, useful for adding quick notes to org items
+
+    E.g. before:
+
+    * parent note
+      some text <cursor is here>
+    ** child
+       child text
+
+    after you call this function, you end up with:
+    * parent note
+      some text
+    ** child
+       child text
+    ** [YYYY-MM-DD Mom HH:MM] <cursor is here, edit mode>
+
+    """
+    (interactive)
+    (let* ((has-children (save-excursion (org-goto-first-child))))
+      (org-end-of-subtree)
+      (let ((org-blank-before-new-entry nil)) (org-insert-heading))
+      (org-time-stamp '(16) t) ; 16 means inactive
+      (if has-children nil (org-do-demote)) (insert " ")
+      (evil-append 1)))
+
   (defun org-eshell-command (command)
     ;; run command in eshell (e.g. [[eshell: ls -al /home]]
     (interactive)
@@ -309,7 +338,7 @@
   (evil-leader/set-key-for-mode 'org-mode
     ">" #'org-demote-subtree
     "<" #'org-promote-subtree
-    "," #'my/org-comment))
+    "," #'my/org-quicknote))
 
 
 (spacemacs/set-leader-keys

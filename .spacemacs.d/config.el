@@ -227,6 +227,14 @@
 
 ;;;
 
+;;; org styling
+(with-eval-after-load 'org
+  (dolist (tag '("pr" "prv" "private"))
+    (add-to-list 'org-tag-faces
+                 `(,tag . (:foreground "red" :weight bold)))))
+
+;;;
+
 ;;; misc org stuff
 
 (with-eval-after-load 'org

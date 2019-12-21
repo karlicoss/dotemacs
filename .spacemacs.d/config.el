@@ -254,6 +254,9 @@
   (load-file "~/dotfiles-emacs/lang/python.el"))
 
 
+(load-file "~/dotfiles-emacs/blog.el")
+
+
 ;;; keybindings etc
 
 (defun --my/org-agenda-postpone (days)

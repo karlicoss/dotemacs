@@ -238,6 +238,18 @@
 ;;; misc org stuff
 
 (with-eval-after-load 'org
+  (defun org-eshell-command (command)
+    ;; run command in eshell (e.g. [[eshell: ls -al /home]]
+    (interactive)
+    (progn
+      (eshell)
+      (eshell-return-to-prompt)
+      (insert command)
+      (eshell-send-input)))
+
+  ;; TODO export it properly?
+  (org-add-link-type "eshell" 'org-eshell-command)
+
   (load-file "~/dotfiles-emacs/babel-mypy.el"))
 
 ;;;

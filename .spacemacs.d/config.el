@@ -244,7 +244,13 @@
 
 
 ;;; org-drill
+
+(with-eval-after-load 'org
+  (add-to-list 'org-modules 'org-drill))
+
+
 (with-eval-after-load 'org-drill
+  (setq org-drill-learn-fraction 0.3)
   (setq org-drill-pronounce-command nil)) ; disable creepy pronouncing
 
 ;;;

@@ -279,7 +279,10 @@
   ;; TODO export it properly?
   (org-add-link-type "eshell" 'org-eshell-command)
 
-  (load-file "~/dotfiles-emacs/babel-mypy.el"))
+  (require 'org-sync)
+  (require 'org-sync-github)
+
+  (load "~/dotfiles-emacs/babel-mypy.el"))
 
 ;;;
 

@@ -28,7 +28,7 @@
     (if has-children nil (org-do-demote)) (insert " ")
     (evil-append 1)))
 
-(defun org-eshell-command (command)
+(defun my/org-eshell-command (command)
   ;; run command in eshell (e.g. [[eshell: ls -al /home]]
   (interactive)
   (progn
@@ -38,4 +38,11 @@
     (eshell-send-input)))
 
 ;; TODO export it properly?
-(org-add-link-type "eshell" 'org-eshell-command)
+(org-add-link-type "eshell" 'my/org-eshell-command)
+
+
+;; 'p': raw prefix, 'P': numeric prefix. confusing ...
+(defun my/org-wipe-subtree (&optional n)
+  (interactive "p")
+  (org-cut-subtree n)
+  (pop kill-ring))

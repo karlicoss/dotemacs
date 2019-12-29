@@ -301,6 +301,21 @@
   (evil-global-set-key 'insert (kbd "C-t") #'my/now)
 
   (evil-leader/set-key-for-mode 'org-mode
+
+    "r" #'org-refile
+
+    ; TODO these hotkeys should be same as agenda mode hotkeys
+    "A" #'org-archive-subtree
+    "s" #'org-schedule
+    "d" #'org-deadline
+    ":" #'org-set-tags-command
+    ; TODO this as well??
+    "u" #'org-unschedule
+
+
+    "X" #'my/org-wipe-subtree
+    "x" #'org-cut-subtree ; todo not sure if m is the proper way to do it
+    "y" #'org-paste-subtree
     ">" #'org-demote-subtree
     "<" #'org-promote-subtree
     "," #'my/org-quicknote))

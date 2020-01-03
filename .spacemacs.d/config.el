@@ -170,6 +170,15 @@
 
 
 ;;; org-drill
+
+(with-eval-after-load 'org-drill
+  ;; load patch that makes org-drill detect and present empty cards (without body)
+  (load "~/dotfiles-emacs/patch-org-drill.el")
+  (add-to-list
+   'org-drill-card-type-alist
+   '(nil org-drill-present-simple-card nil t)))
+
+
 (defun --my/drill-with-tag (tag)
   (require 'org-drill)
   (let ((org-drill-question-tag tag))

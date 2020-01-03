@@ -10,6 +10,7 @@
         xclip
         sync-recentf
 
+        org-drill
         org-plus-contrib
         org-super-agenda
         org-ql

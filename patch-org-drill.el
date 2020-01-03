@@ -5,10 +5,13 @@
 ; (see https://gitlab.com/phillord/org-drill/tree/master#simple-topics)
 ; , but without even needing an answer
 
+; TODO add test?
 ; TODO propose it to org-drill?
 
+(el-patch-feature org-drill)
+(with-eval-after-load 'org-drill
 
-(defun org-drill-entry-status (session)
+(el-patch-defun org-drill-entry-status (session)
   "Returns a list (STATUS DUE AGE) where DUE is the number of days overdue,
 zero being due today, -1 being scheduled 1 day in the future.
 AGE is the number of days elapsed since the item was created (nil if unknown).
@@ -35,7 +38,7 @@ STATUS is one of the following values:
         ((and (org-drill-entry-empty-p)
               (let* ((card-type (org-entry-get (point) "DRILL_CARD_TYPE" nil))
                     (dat (cdr (assoc card-type org-drill-card-type-alist))))
-                (or (null card-type)
+                ((el-patch-swap or and) (null card-type)
                     (not (cl-third dat)))))
          ;; body is empty, and this is not a card type where empty bodies are
          ;; meaningful, so skip it.
@@ -66,3 +69,6 @@ STATUS is one of the following values:
         (t
          :old))
        due age))))
+
+
+)

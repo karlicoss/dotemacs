@@ -231,8 +231,12 @@
   (defun --my/get-opened-org-files ()
     (-non-nil (-distinct (-map #'buffer-file-name (org-buffer-list)))))
 
-  (org-refile-cache-clear)
+  ;; I don't use cache because cache is only useful when you have to traverse filesystem to search for Org files
+  ;; without cache, it's much easier to discover new refile targets
+  (setq org-refile-use-cache nil)
+  ;; I cache files contributing to refile here so I'm fine without refile cache.
   (setq --my/org-refile-targets (--my/get-org-refile-targets))
+
   (setq org-refile-targets
         '((nil                       :maxlevel . 1)
           (--my/org-refile-targets   :tag . "refile")
@@ -244,10 +248,10 @@
   (--my/org-refile-targets-refresh)
 
   ;; https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html
-  (setq org-refile-use-cache t)
   (setq org-refile-use-outline-path 'buffer-name) ; otherwise you can't create a top level heading
   (setq org-outline-path-complete-in-steps nil) ; otherwise you ONLY can create a top level heading!
 
+  ;; disambiguate between buffers with same names
   ;; https://emacs.stackexchange.com/a/37610/19521
   (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
   (setq uniquify-strip-common-suffix nil))

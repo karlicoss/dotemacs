@@ -46,3 +46,16 @@
   (interactive "p")
   (org-cut-subtree n)
   (pop kill-ring))
+
+
+;; TODO extract in a sep function? e.g. with-current-entry?
+;; TODO ert-deftest?
+(defun my/org-inline-created ()
+  "Convert CREATED property into inline date"
+  (interactive)
+  (let ((created (org-entry-get (point) "CREATED"))
+        (heading (org-get-heading t t t t))) ;; t t t t means include everything
+    (save-excursion
+      (org-back-to-heading t)
+      (org-edit-headline (concat created " " heading)))
+    (org-entry-delete (point) "CREATED")))

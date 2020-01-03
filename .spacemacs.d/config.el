@@ -333,6 +333,7 @@
 
   (evil-leader/set-key-for-mode 'org-mode
 
+    "c" #'my/org-inline-created
     "r" #'org-refile
 
     ; TODO these hotkeys should be same as agenda mode hotkeys

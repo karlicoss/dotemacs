@@ -221,10 +221,27 @@
 
 ;;; org-refile
 
-(defun get-org-refile-targets ()
-  (my/org-files-in my/refile-targets :follow t))
+(defun --my/org-refile-targets-refresh ()
+  (interactive)
+
+  (defun --my/get-org-refile-targets ()
+    (my/org-files-in my/refile-targets :follow t))
+
+  ;; TODO make it async and refresh on idle?
+  (defun --my/get-opened-org-files ()
+    (-distinct (-map #'buffer-file-name (org-buffer-list))))
+
+  (setq --my/org-refile-targets (--my/get-org-refile-targets))
+  ;; TODO use nil?
+  (setq org-refile-targets
+        '((--my/org-refile-targets   :maxlevel . 1)
+          (--my/get-opened-org-files :maxlevel . 1))))
+
 
 (with-eval-after-load 'org
+  ;; TODO eh
+  (--my/org-refile-targets-refresh)
+
   ;; https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html
   (setq org-refile-use-cache t)
   (setq org-refile-use-outline-path 'buffer-name) ; otherwise you can't create a top level heading

@@ -227,15 +227,16 @@
   (defun --my/get-org-refile-targets ()
     (my/org-files-in my/refile-targets :follow t))
 
-  ;; TODO make it async and refresh on idle?
+  ;; todo make it async and refresh on idle?
   (defun --my/get-opened-org-files ()
-    (-distinct (-map #'buffer-file-name (org-buffer-list))))
+    (-non-nil (-distinct (-map #'buffer-file-name (org-buffer-list)))))
 
+  (org-refile-cache-clear)
   (setq --my/org-refile-targets (--my/get-org-refile-targets))
-  ;; TODO use nil?
   (setq org-refile-targets
-        '((--my/org-refile-targets   :maxlevel . 1)
-          (--my/get-opened-org-files :maxlevel . 1))))
+        '((nil                       :maxlevel . 1)
+          (--my/org-refile-targets   :tag . "refile")
+          (--my/get-opened-org-files :tag . "refile"))))
 
 
 (with-eval-after-load 'org

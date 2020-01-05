@@ -1,6 +1,7 @@
 (setq my/spacemacs-layers
       '(
         (colors :variables colors-enable-nyan-cat-progress-bar t)
+        graphviz
         ))
 
 (setq my/additional-packages

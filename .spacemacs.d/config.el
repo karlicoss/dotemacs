@@ -307,6 +307,9 @@
 
 (load-file "~/dotfiles-emacs/blog.el")
 
+(with-eval-after-load 'graphviz-dot-mode
+  (setq graphviz-dot-preview-extension "svg"))
+
 
 ;;; keybindings etc
 

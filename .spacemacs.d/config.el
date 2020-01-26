@@ -200,6 +200,7 @@
 
 ;;; org-agenda
 
+;; TODO my/ prefix?
 (defun get-org-agenda-files ()
   (my/org-files-in my/agenda-targets :follow t))
 
@@ -267,6 +268,17 @@
 ;;;
 
 ;;; misc org stuff
+
+(cl-defun my/org-ql-search (query)
+  (interactive)
+  (require 'org-ql-search)
+  (org-ql-search (get-org-agenda-files) query))
+
+
+(cl-defun my/org-ql-search-tags (tags)
+  (interactive (list (read-minibuffer "Tags:")))
+  (message "%s" tags)
+  (my/org-ql-search (format "tags:%s" tags)))
 
 
 (with-eval-after-load 'org
@@ -363,6 +375,8 @@
   "RET" #'helm-swoop
   "S s" #'my/search
   "S c" #'my/search-code
+  "S q" #'my/org-ql-search
+  "S t" #'my/org-ql-search-tags
 
   ;; TODO shit! configure other engines as well
   ;; lets you enger an interactive query

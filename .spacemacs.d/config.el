@@ -171,12 +171,26 @@
 
 ;;; org-drill
 
+;; TODO need to fix resume to remember latest tag? not sure why it's broken..
 (with-eval-after-load 'org-drill
   ;; load patch that makes org-drill detect and present empty cards (without body)
   (load "~/dotfiles-emacs/patch-org-drill.el")
   (add-to-list
    'org-drill-card-type-alist
-   '(nil org-drill-present-simple-card nil t)))
+   '(nil org-drill-present-simple-card nil t))
+
+  ;; hack to exclude items that I'm done with (i.e. marked as DONE/CANCEL)
+  (defun org-drill-entry-p (&optional marker)
+    (interactive)
+    (save-excursion
+      (when marker
+        (org-drill-goto-entry marker))
+      (and
+       (member org-drill-question-tag (org-get-tags nil t))
+       ;; org-drill offers quick way of editing tags, so I find it useful
+       (not (member "oldhabit" (org-get-tags nil t)))
+       ;; TODO use org-done-keywords or something?
+       (not (member (org-get-todo-state) '("DONE" "CANCEL")))))))
 
 
 (defun --my/drill-with-tag (tag)

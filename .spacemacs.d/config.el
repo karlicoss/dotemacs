@@ -32,10 +32,11 @@
   "Search for files with certail extensions and potentially following symlinks.
    None of standard Elisp functions or popular libs support following symlink :(
    In addition, rg is ridiculously fast."
+  (assert (stringp path)) ;; TODO surely there is a nicer way?? how to define it next to path?
   (let* ((patterns (s-join " " (-map (lambda (i) (format "-e %s" i)) exts)))
          (follows (if follow "--follow" ""))
          (rg-command (format
-                      "fdfind . %s %s %s -x readlink -f" ; ugh, --zero isn't supported on alpine (cloudmacs)
+                      "fdfind . %s %s '%s' -x readlink -f" ; ugh, --zero isn't supported on alpine (cloudmacs)
                       follows
                       patterns
                       path))

@@ -9,8 +9,6 @@ echo $output
 
 
 (setq --babel-mypy/exec-mypy "
-MYPYPATH=/L/tmp/result/  # TODO ugh, just need to touch py.typed..
-
 output=$(python3 -m mypy --show-error-codes --strict $tfile 2>&1)
 res=$?
 output=$(echo $output | sed \"$sed_command\")

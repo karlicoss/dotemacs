@@ -36,7 +36,8 @@
   (let* ((patterns (s-join " " (-map (lambda (i) (format "-e %s" i)) exts)))
          (follows (if follow "--follow" ""))
          (rg-command (format
-                      "fdfind . %s %s '%s' -x readlink -f" ; ugh, --zero isn't supported on alpine (cloudmacs)
+	              ;; TODO ugh. quoting third %s broke agenda for some reason (fd complained it wasn't a directory??)
+                      "fdfind . %s %s %s -x readlink -f" ; ugh, --zero isn't supported on alpine (cloudmacs)
                       follows
                       patterns
                       path))

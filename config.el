@@ -64,3 +64,9 @@
       "8" #'winum-select-window-8
       "9" #'winum-select-window-9)
 
+
+(map! :map evil-window-map
+      "/" #'split-window-right
+      "-" #'split-window-below)
+
+

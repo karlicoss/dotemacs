@@ -51,6 +51,11 @@
 
 ;; TODO use parinfer early on...
 
+
+(load! "../configs/emacs/private.el")
+(load! "../dotfiles-emacs/.spacemacs.d/config.el")
+
+
 ;; TODO use (loop for i from 1 to 10 do (map!... )) ?? 
 (map! :leader
       "0" #'winum-select-window-0-or-10
@@ -68,5 +73,4 @@
 (map! :map evil-window-map
       "/" #'split-window-right
       "-" #'split-window-below)
-
 

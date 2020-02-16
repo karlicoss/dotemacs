@@ -285,21 +285,22 @@
 
 ;;; misc org stuff
 
-(cl-defun my/org-ql-search (query)
+(cl-defun my/org-ql-search (query &rest args)
   (interactive)
   (require 'org-ql-search)
-  (org-ql-search (get-org-agenda-files) query))
+  (apply #'org-ql-search (get-org-agenda-files) query args))
 
 
 (cl-defun my/org-ql-search-tags (tags)
   (interactive (list (read-minibuffer "Tags:")))
   (message "%s" tags)
-  (my/org-ql-search (format "tags:%s" tags)))
+  (my/org-ql-search (format "tags:%s" tags) :sort 'priority))
 
 
 (with-eval-after-load 'org
   (load "~/dotfiles-emacs/org.el")
 
+  ;; TOOD hmm, is there a way to load lazily?
   (require 'org-sync)
   (require 'org-sync-github)
 

@@ -360,8 +360,8 @@
                 (--my/org-agenda-postpone ,days)))))
 
 (if (boundp 'doom-version)
-    (defun --evil-set-key-for-mode (&rest args) ()) ;; TODO warn??
-    (setq  --evil-set-key-for-mode #'evil-leader/set-key-for-mode))
+    (defun     --evil-set-key-for-mode (&rest args) ()) ;; TODO warn??
+    (defalias '--evil-set-key-for-mode #'evil-leader/set-key-for-mode))
 
 
 (with-eval-after-load 'evil
@@ -389,8 +389,8 @@
     "," #'my/org-quicknote))
 
 (if (boundp 'doom-version)
-    (defun --set-leader-keys (&rest args) ()) ;; TODO warn??
-    (setq  --set-leader-keys #'spacemacs/set-leader-keys))
+    (defun     --set-leader-keys (&rest args) ()) ;; TODO warn??
+    (defalias '--set-leader-keys #'spacemacs/set-leader-keys))
 
 (--set-leader-keys
   "A"   #'my/switch-to-agenda

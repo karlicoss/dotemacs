@@ -359,11 +359,15 @@
                 (interactive)
                 (--my/org-agenda-postpone ,days)))))
 
+(if (boundp 'doom-version)
+    (defun --evil-set-key-for-mode (&rest args) ()) ;; TODO warn??
+    (setq  --evil-set-key-for-mode #'evil-leader/set-key-for-mode))
+
 
 (with-eval-after-load 'evil
   (evil-global-set-key 'insert (kbd "C-t") #'my/now)
 
-  (evil-leader/set-key-for-mode 'org-mode
+  (--evil-set-key-for-mode 'org-mode
 
     "c" #'my/org-inline-created
     "r" #'org-refile
@@ -384,8 +388,11 @@
     "<" #'org-promote-subtree
     "," #'my/org-quicknote))
 
+(if (boundp 'doom-version)
+    (defun --set-leader-keys (&rest args) ()) ;; TODO warn??
+    (setq  --set-leader-keys #'spacemacs/set-leader-keys))
 
-(spacemacs/set-leader-keys
+(--set-leader-keys
   "A"   #'my/switch-to-agenda
 
 

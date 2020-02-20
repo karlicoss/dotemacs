@@ -11,8 +11,14 @@
         xclip
         sync-recentf
 
+        (org-mode 
+         :location (recipe
+	            :fetcher github
+		    :repo "emacs-straight/org-mode"
+		    :commit "2096c9c76f"
+		    :files ("*.el" "lisp/*.el" "contrib/lisp/*.el")))
         org-drill
-        org-plus-contrib
+        ;; org-plus-contrib
         org-super-agenda
         org-ql
         (org-sync

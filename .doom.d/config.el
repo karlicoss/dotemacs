@@ -1,7 +1,6 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
-;; Place your private configuration here! Remember, you do not need to run 'doom
-;; refresh' after modifying this file!
+;; NOTE: run 'doom refresh' after modifying this file!
 
 
 ;; These are used for a number of things, particularly for GPG configuration,
@@ -28,8 +27,7 @@
 ;; If you intend to use org, it is recommended you change this!
 (setq org-directory "~/org/")
 
-;; If you want to change the style of line numbers, change this to `relative' or
-;; `nil' to disable it:
+;; TODO `relative' ?
 (setq display-line-numbers-type t)
 
 

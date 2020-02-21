@@ -357,7 +357,20 @@
    org-agenda-start-on-weekday nil
 
    ;; override Doom's default
-   org-agenda-start-day nil))
+   org-agenda-start-day nil
+
+   org-agenda-scheduled-leaders '("S       "
+                                  "S %-2d ago")
+   org-agenda-deadline-leaders  '("D       "
+                                  "D in %-3d"
+                                  "D %-2d ago"))
+
+
+  (add-to-list 'org-agenda-prefix-format
+               '(agenda  . "%i%-3:(--my/org-agenda-extras) %-12:c%?-12t% s "))
+
+  (add-to-list 'org-agenda-prefix-format
+               '(tags    . "%i%-1:(--my/org-tags-extras) %-12:c")))
 
 
 ;;;

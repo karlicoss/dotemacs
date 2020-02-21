@@ -59,3 +59,27 @@
       (org-back-to-heading t)
       (org-edit-headline (concat created " " heading)))
     (org-entry-delete (point) "CREATED")))
+
+
+;; -- various org-agenda helpers
+
+(defun --my/org-level ()
+  (let ((level (org-outline-level)))
+    (if (= 1 level) " " (format "%s" level))))
+
+
+(defun --my/org-has-extras ()
+  (if (save-excursion (org-goto-first-child)) "▶" " "))
+
+
+(defun --my/org-agenda-extras ()
+  (concat
+    ;; (my/org-is-recurring) TODO
+    (--my/org-has-extras)))
+
+
+(defun --my/org-tags-extras ()
+  (concat
+   (--my/org-level)))
+
+;; --

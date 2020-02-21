@@ -305,8 +305,22 @@
 
 (with-eval-after-load 'org
   (load "~/dotfiles-emacs/org.el")
+  ;; TODO ugh. I'm really not sure how should I organize my config...
 
-  ;; TOOD hmm, is there a way to load lazily?
+  ;; TODO not sure with doom's after! keyword, when it's the right time to do this really...
+  (setq org-todo-keywords '((sequence
+                             "TODO(t)"
+                             "START(!)" ;; TODO deprecate START
+                             "STRT(s!)"
+                             "WAIT(w@)"
+                             "|"
+                             "DONE(d!)"
+                             "CANCEL(c@)"
+                             "SKIP(k!)")))
+
+
+
+  ;; TODO hmm, is there a way to load lazily?
   (require 'org-sync)
   (require 'org-sync-github)
 

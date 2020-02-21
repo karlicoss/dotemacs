@@ -217,10 +217,16 @@
 ;;; org-agenda
 
 ;; TODO my/ prefix?
-(defun get-org-agenda-files ()
+(defun my/org-agenda-files-get ()
   (my/org-files-in my/agenda-targets :follow t))
 
-; TODO hotkey to toggle private/non private?
+
+(defun my/org-agenda-files-refresh ()
+  (interactive)
+  (setq org-agenda-files (my/org-agenda-files-get)))
+
+
+;; TODO hotkey to toggle private/non private?
 (defun my/agenda (&optional arg)
   (interactive "P")
   (require 'org-agenda)
@@ -288,7 +294,7 @@
 (cl-defun my/org-ql-search (query &rest args)
   (interactive)
   (require 'org-ql-search)
-  (apply #'org-ql-search (get-org-agenda-files) query args))
+  (apply #'org-ql-search (my/org-agenda-files-get) query args))
 
 
 (cl-defun my/org-ql-search-tags (tags)

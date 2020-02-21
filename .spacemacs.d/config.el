@@ -310,6 +310,7 @@
   ;; TODO not sure with doom's after! keyword, when it's the right time to do this really...
   (setq org-todo-keywords '((sequence
                              "TODO(t)"
+                             ;; TODO not sure with doom's after! keyword, when it's the right time to do this really...
                              "START(!)" ;; TODO deprecate START
                              "STRT(s!)"
                              "WAIT(w@)"
@@ -328,6 +329,22 @@
 
 ;;;
 
+;;; org-agenda
+
+(with-eval-after-load 'org-agenda
+  (setq-default ;; dunno why setq-default, but Doom does it...
+
+   ;; makes it considerably quicker...
+   org-agenda-span 3
+
+   ;; start on 'today' (default in doom)
+   org-agenda-start-on-weekday nil
+
+   ;; override Doom's default
+   org-agenda-start-day nil))
+
+
+;;;
 
 ;;; org-drill
 

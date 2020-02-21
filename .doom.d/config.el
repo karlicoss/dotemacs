@@ -24,9 +24,6 @@
 ;; `load-theme' function. These are the defaults.
 (setq doom-theme 'doom-one)
 
-;; If you intend to use org, it is recommended you change this!
-(setq org-directory "~/org/")
-
 ;; TODO `relative' ?
 (setq display-line-numbers-type t)
 
@@ -52,6 +49,14 @@
 
 (load! "../configs/emacs/private.el")
 (load! "../dotfiles-emacs/.spacemacs.d/config.el")
+;; TODO move confil.el to root?
+
+
+;; TODO why is it trying to load org-agenda at the same time as org??
+(after! org-agenda
+  (message "[DEBUG] AFTER ORG-AGENDA")
+  (my/org-agenda-files-refresh)) ;; TODO call on timer?
+
 
 
 ;; TODO use (loop for i from 1 to 10 do (map!... )) ?? 

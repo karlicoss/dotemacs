@@ -72,9 +72,29 @@
   (if (save-excursion (org-goto-first-child)) "▶" " "))
 
 
+;; TODO hmm, display instead of "S/D" maybe?
+;; TODO maybe even indicate how frequently is it repeated?
+(defun --my/org-is-recurring ()
+  ;; recurring if deadline is set and deadline string has repeater cookie
+  ;; TODO ideally, mirror same thing in org agenda patch?
+  (let* ((deadlines (org-entry-get (point) "DEADLINE"))
+         (rdeadline (if deadlines (org-get-repeat deadlines) nil)))
+    (if rdeadline "↻ " "  ")))
+;; so, there is a unicode-fonts package, with it you can get the whole range of arrows e.g. 🔁 🗘 ↺ ↻ ⥀ ⥁ ⟲ ⟳  🗘  ⮍ ⮌ ⮏ ⮎ ⮔ 🔁 🔂 🔃 🔄
+;; (this one 🔃 in particular looks nice)
+;; however, extra errors not displaying as default font (eg DejaVu Sans Mono), but as Free-Symbola (try describe-char)
+;; hmm, even after package removal they are still bizarre! So it could be smth else!
+;; hmm, in vim they are different width too..
+;; right, apparently it's that http://www.fileformat.info/info/unicode/font/dejavu_sans_mono/blockview.htm?block=arrows
+;; and fallback is defined in font family itself?
+;; https://www.fileformat.info/info/unicode/block/miscellaneous_symbols_and_arrows/fontsupport.htm ok that explains it...
+;; so I have to use normal arrows. Source Code pro doesn't support them too?? so switch to dejavu sans mono
+;; TODO also disable using different fonts for different unicode characters? It might make the whole thing kinda slow
+;; also see .emacs.d/core/core-fonts-support.el, fallback fonts
+
 (defun --my/org-agenda-extras ()
   (concat
-    ;; (my/org-is-recurring) TODO
+    (--my/org-is-recurring)
     (--my/org-has-extras)))
 
 

@@ -226,12 +226,28 @@
   (setq org-agenda-files (my/org-agenda-files-get)))
 
 
+;; TODO private groups (with fallback)?
+(setq org-super-agenda-groups
+      '( ;; unmatched order is 99
+        (:name "Important"
+               :tag "important"
+               :priority "A"
+               :order -50)
+        (:name "Shopping"
+               :tag ("shopping" "buy")
+               :order -20)
+        (:name "Drill"
+               :tag ("drill" "habit")
+               :order 999))) ;; sink drill all the way down
+
+
 ;; TODO hotkey to toggle private/non private?
 (defun my/agenda (&optional arg)
   (interactive "P")
-  (require 'org-agenda)
+  (require 'org-agenda) ;; TODO require super agenda??
   (let ((org-agenda-tag-filter-preset '("-prv"))
-        (org-agenda-window-setup 'only-window))
+        (org-agenda-window-setup 'only-window)) ;; TODO ??
+    (org-super-agenda-mode) ;; only use org-super-agenda for global agenda
     (org-agenda arg "a")))
 
 (defun my/switch-to-agenda ()

@@ -62,3 +62,5 @@
 (package! el-patch)
 (package! org-sync
   :recipe (:host github :repo "karlicoss/org-sync" :branch "fix-nondeterminism"))
+
+(package! org-super-agenda)

@@ -365,6 +365,10 @@
                                   "D in %-3d"
                                   "D %-2d ago"))
 
+  ;; work around issues with evil-org and super agenda headings
+  ;; https://github.com/alphapapa/org-super-agenda/issues/112#issuecomment-548224512
+  (setq org-super-agenda-header-map nil)
+
 
   (add-to-list 'org-agenda-prefix-format
                '(agenda  . "%i%-3:(--my/org-agenda-extras) %-12:c%?-12t% s "))

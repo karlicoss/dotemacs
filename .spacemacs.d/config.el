@@ -333,8 +333,25 @@
                              "|"
                              "DONE(d!)"
                              "CANCEL(c@)"
-                             "SKIP(k!)")))
+                             "SKIP(k!)"))
 
+        org-log-into-drawer t ;; log todo state changes
+        org-log-states-order-reversed t) ;; default, but whatever
+
+
+  ;; TODO merge with private
+  (setq org-capture-templates
+        '(("t"
+           "todo"
+           entry
+           (file my-org-notes-file) ;; TODO rename to --my
+           "* TODO %? %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n")
+
+          ("n"
+           "note"
+           entry
+           (file my-org-notes-file)
+           "* %? %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n")))
 
 
   ;; TODO hmm, is there a way to load lazily?

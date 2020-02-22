@@ -103,3 +103,23 @@
    (--my/org-level)))
 
 ;; --
+
+;; https://emacs.stackexchange.com/a/30449
+(defun nth-day-of-month-p (n date)
+  "Helper for agenda to schedule on a specific day of month"
+  (let* ((day-of-week    (calendar-day-of-week       date))
+         (month          (calendar-extract-month     date))
+         (year           (calendar-extract-year      date))
+         (last-month-day (calendar-last-day-of-month month year))
+         (month-day      (cadr date)))
+    (if (> n 0)
+        (eq month-day n)
+        (eq month-day (+ last-month-day n 1)))))
+
+
+(defun on-last-day-of-month (date)
+  (nth-day-of-month-p -1 date))
+
+
+(defun on-nth-day-of-month (n)
+  (nth-day-of-month-p  n date))

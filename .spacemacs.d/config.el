@@ -338,6 +338,9 @@
         org-log-into-drawer t ;; log todo state changes
         org-log-states-order-reversed t) ;; default, but whatever
 
+  (setq org-priority-lowest  ?E
+        org-priority-default ?C)
+
 
   ;; TODO merge with private
   (setq org-capture-templates

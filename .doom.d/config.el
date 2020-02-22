@@ -83,3 +83,7 @@
   (evil-define-key 'motion evil-org-agenda-mode-map
     "S" #'org-save-all-org-buffers))
 
+
+(after! so-long
+  ;; was messing with org-mode... wonder if I can adjust it just for org
+  (setq so-long-threshold 1000))

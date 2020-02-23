@@ -61,6 +61,22 @@
     (org-entry-delete (point) "CREATED")))
 
 
+(defun --my/org-sort-key ()
+  "Moves cancel and done down; otherwise by priority"
+  (let* ((todo         (org-entry-get (point) "TODO"))
+         (priority     (org-entry-get (point) "PRIORITY"))
+         (todo-int     (if (member todo org-done-keywords) 1 0))
+         (priority-int (if priority (string-to-char priority) org-default-priority))
+         (keystr       (format "%03d %03d" todo-int priority-int)))
+    keystr))
+
+
+(defun my/org-sort-entries ()
+  "Sort ORG entries according to my rules"
+  (interactive)
+  (org-sort-entries nil ?f #'--my/org-sort-key))
+
+
 ;; -- various org-agenda helpers
 
 (defun --my/org-level ()

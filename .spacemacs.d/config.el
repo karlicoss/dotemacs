@@ -443,6 +443,11 @@
   (load-theme 'doom-one t))
 
 
+(with-eval-after-load 'dired
+  ;; show ISO time
+  (setq dired-listing-switches (concat dired-listing-switches " --full-time")))
+
+
 ;;;
 
 

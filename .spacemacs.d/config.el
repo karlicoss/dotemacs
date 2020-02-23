@@ -423,6 +423,18 @@
   "Insert current timestamp in org-mode format"
   (interactive)
   (insert (format-time-string "[%Y-%m-%d %a %H:%M]")))
+
+
+(defun my/light ()
+  (interactive)
+  (load-theme 'doom-one-light t))
+
+
+(defun my/dark ()
+  (interactive)
+  (load-theme 'doom-one t))
+
+
 ;;;
 
 

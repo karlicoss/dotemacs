@@ -447,6 +447,8 @@
   ;; show ISO time
   (setq dired-listing-switches (concat dired-listing-switches " --full-time")))
 
+;; otherwise it's just 'emacs'
+(setq frame-title-format "emacs: %b %f")
 
 ;;;
 

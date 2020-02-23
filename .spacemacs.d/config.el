@@ -370,6 +370,13 @@
 (with-eval-after-load 'org-agenda
   (setq-default ;; dunno why setq-default, but Doom does it...
 
+   ;; by default agenda treats this:
+   ;; * TODO [2019-12-21 Sat 13:17] some task
+   ;; SCHEDULED: <2020-02-23 Sun>
+   ;; as scheduled at 13:17 on 2020-02-23
+   ;; this is documented in org-agenda, so it's a proper way of fixing that behaviour
+   org-agenda-search-headline-for-time nil
+
    ;; makes it considerably quicker...
    org-agenda-span 3
 

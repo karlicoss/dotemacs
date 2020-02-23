@@ -447,6 +447,20 @@
 ;; https://lists.gnu.org/archive/html/emacs-orgmode/2011-02/msg00260.html
 
 
+;; TODO ugh. fucking hell, that doesn't work
+;; why is this so hard to unflatten a list??
+;; (after! evil-org-agend
+;;   (apply #'evil-define-key
+;;          'motion
+;;          evil-org-agenda-mode-map
+;;          (loop for days from 0 to 9
+;;                collect
+;;                (list (format "%d" days)
+;;                      `(lambda ()
+;;                         ,(format "Schedule %d days later" days)
+;;                         (interactive)
+;;                         (--my/org-agenda-postpone ,days)))
+
 (with-eval-after-load 'org-agenda
   (loop for days from 0 to 9
         do (evil-define-key 'motion evil-org-agenda-mode-map

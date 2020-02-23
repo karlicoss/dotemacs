@@ -335,6 +335,9 @@
                              "CANCEL(c@)"
                              "SKIP(k!)"))
 
+        ;; override Doom's default
+        org-enforce-todo-dependencies nil
+
         org-log-into-drawer t ;; log todo state changes
         org-log-states-order-reversed t) ;; default, but whatever
 
@@ -385,6 +388,11 @@
 
    ;; override Doom's default
    org-agenda-start-day nil
+
+
+   ;; align todo keywords in the agenda view
+   ;; (6 is the longest todo keyword I use)
+   org-agenda-todo-keyword-format "%-6s"
 
    org-agenda-scheduled-leaders '("S       "
                                   "S %-2d ago")

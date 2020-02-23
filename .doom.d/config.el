@@ -57,6 +57,7 @@
   (message "[DEBUG] AFTER ORG-AGENDA")
   (my/org-agenda-files-refresh)) ;; TODO call on timer?
 
+;;   (my/org-agenda-files-refresh)) ;; TODO call on timer?
 
 
 ;; TODO use (loop for i from 1 to 10 do (map!... )) ?? 

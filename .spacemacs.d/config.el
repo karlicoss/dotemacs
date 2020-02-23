@@ -446,15 +446,17 @@
 ;; TODO not sure what's the difference between org-defkey and other methods of binding...
 ;; https://lists.gnu.org/archive/html/emacs-orgmode/2011-02/msg00260.html
 
+
 (with-eval-after-load 'org-agenda
   (loop for days from 0 to 9
-        do (org-defkey
-             org-agenda-mode-map
+        do (evil-define-key 'motion evil-org-agenda-mode-map
              (format "%d" days)
              `(lambda ()
                 ,(format "Schedule %d days later" days)
                 (interactive)
                 (--my/org-agenda-postpone ,days)))))
+
+(setq --my/is-doom (boundp 'doom-version))
 
 (if (boundp 'doom-version)
     (defun     --evil-set-key-for-mode (&rest args) ()) ;; TODO warn??

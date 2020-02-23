@@ -439,6 +439,12 @@
 
 ;;; keybindings etc
 
+(defun my/org-agenda-unschedule ()
+  (interactive)
+  (let ((current-prefix-arg '(4)))
+    (call-interactively 'org-agenda-schedule)))
+
+
 (defun --my/org-agenda-postpone (days)
   (interactive)
   (org-agenda-schedule nil (format "+%dd" days)))

@@ -81,7 +81,8 @@
 ;; TODO eh, not convinced it's the right way, but at least works
 (after! evil-org-agenda
   (evil-define-key 'motion evil-org-agenda-mode-map
-    "S" #'org-save-all-org-buffers))
+    "S" #'org-save-all-org-buffers
+    "U" #'my/org-agenda-unschedule))
 
 
 (after! so-long

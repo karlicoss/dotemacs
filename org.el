@@ -48,6 +48,13 @@
   (pop kill-ring))
 
 
+(defun my/org-unschedule ()
+  "Remove scheduling from the current item"
+  (interactive)
+  ;; apparently any prefix argument makes it unschedule
+  (let ((current-prefix-arg '(4))) (call-interactively 'org-schedule)))
+
+
 ;; TODO extract in a sep function? e.g. with-current-entry?
 ;; TODO ert-deftest?
 (defun my/org-inline-created ()

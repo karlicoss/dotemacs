@@ -500,7 +500,7 @@
 ;;                         (interactive)
 ;;                         (--my/org-agenda-postpone ,days)))
 
-(with-eval-after-load 'org-agenda
+(after! org-agenda
   (loop for days from 0 to 9
         do (evil-define-key 'motion evil-org-agenda-mode-map
              (format "%d" days)
@@ -509,40 +509,32 @@
                 (interactive)
                 (--my/org-agenda-postpone ,days)))))
 
-(setq --my/is-doom (boundp 'doom-version))
-
-(if (boundp 'doom-version)
-    (defun     --evil-set-key-for-mode (&rest args) ()) ;; TODO warn??
-    (defalias '--evil-set-key-for-mode #'evil-leader/set-key-for-mode))
-
 
 (with-eval-after-load 'evil
-  (evil-global-set-key 'insert (kbd "C-t") #'my/now)
-
-  (--evil-set-key-for-mode 'org-mode
-
-    "c" #'my/org-inline-created
-    "r" #'org-refile
-
-    ; TODO these hotkeys should be same as agenda mode hotkeys
-    "A" #'org-archive-subtree
-    "s" #'org-schedule
-    "d" #'org-deadline
-    ":" #'org-set-tags-command
-    ; TODO this as well??
-    "u" #'org-unschedule
+  (evil-global-set-key 'insert (kbd "C-t") #'my/now))
 
 
-    "X" #'my/org-wipe-subtree
-    "x" #'org-cut-subtree ; todo not sure if m is the proper way to do it
-    "y" #'org-paste-subtree
-    ">" #'org-demote-subtree
-    "<" #'org-promote-subtree
-    "," #'my/org-quicknote))
+(after! org
+  (map! :map org-mode-map
+        :localleader
+
+        ;; "x" #'org-cut-subtree ; todo not sure if m is the proper way to do it
+        ;; "y" #'org-paste-subtree
+
+        ;; doom maps to clocking menu by deafult
+        "c" #'my/org-inline-created
+        ;; doom maps to refile menu by default
+        "r" #'org-refile
+
+        "u" #'my/org-unschedule
+        "X" #'my/org-wipe-subtree
+        ">" #'org-demote-subtree
+        "<" #'org-promote-subtree
+        "," #'my/org-quicknote))
 
 (if (boundp 'doom-version)
     (defun     --set-leader-keys (&rest args) ()) ;; TODO warn??
-    (defalias '--set-leader-keys #'spacemacs/set-leader-keys))
+  (defalias '--set-leader-keys #'spacemacs/set-leader-keys))
 
 (--set-leader-keys
   "A"   #'my/switch-to-agenda

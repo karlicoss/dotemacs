@@ -290,6 +290,7 @@
 
 (with-eval-after-load 'org
   ;; TODO eh
+  ;; TODO call on timer?
   (--my/org-refile-targets-refresh)
 
   ;; https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html
@@ -350,6 +351,11 @@
   (setq org-priority-lowest  ?E
         org-priority-default ?C)
 
+  ;; eh, I'm not really using it and it breaks refiling for me due to
+  ;; Debugger entered--Lisp error: (wrong-type-argument hash-table-p nil)
+  ;; puthash(#("02d1370c-b581-476c-a6e4-d34dc563a9d3" 0 36 (face org-property-value fontified t)) "notes/emacs.org" nil)
+  ;; TODO investigate later
+  (setq org-id-track-globally nil)
 
   ;; TODO merge with private
   (setq org-capture-templates

@@ -47,15 +47,7 @@
 ;; TODO move confil.el to root?
 
 
-;; TODO why is it trying to load org-agenda at the same time as org??
-(after! org-agenda
-  (message "[DEBUG] AFTER ORG-AGENDA")
-  (my/org-agenda-files-refresh)) ;; TODO call on timer?
-
-;;   (my/org-agenda-files-refresh)) ;; TODO call on timer?
-
-
-;; TODO use (loop for i from 1 to 10 do (map!... )) ?? 
+;; TODO use (loop for i from 1 to 10 do (map!... )) ??
 (map! :leader
       "0" #'winum-select-window-0-or-10
       "1" #'winum-select-window-1

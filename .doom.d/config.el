@@ -19,14 +19,12 @@
 ;; font string. You generally only need these two:
 (setq doom-font (font-spec :family "monospace" :size 14))
 
-;; There are two ways to load a theme. Both assume the theme is installed and
-;; available. You can either set `doom-theme' or manually load a theme with the
-;; `load-theme' function. These are the defaults.
 (setq doom-theme 'doom-one)
 
 ;; TODO `relative' ?
 (setq display-line-numbers-type t)
 
+(setq doom-localleader-key ",")
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;

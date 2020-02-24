@@ -66,6 +66,7 @@
 
 
 (map! :leader
+      "/" #'+default/search-project
       "e" #'+eshell/here)
 
 ;; TODO eh, not convinced it's the right way, but at least works

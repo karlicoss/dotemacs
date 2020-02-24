@@ -36,13 +36,10 @@
 ;; - `map!' for binding new keys
 ;;
 ;; To get information about any of these functions/macros, move the cursor over
-;; the highlighted symbol at press 'K' (non-evil users must press 'C-c g k').
-;; This will open documentation for it, including demos of how they are used.
+;; the highlighted symbol at press 'K', this will open documentation for it
 ;;
 ;; You can also try 'gd' (or 'C-c g d') to jump to their definition and see how
 ;; they are implemented.
-
-;; TODO use parinfer early on...
 
 
 (load! "../configs/emacs/private.el")
@@ -71,11 +68,13 @@
       "8" #'winum-select-window-8
       "9" #'winum-select-window-9)
 
-
 (map! :map evil-window-map
       "/" #'split-window-right
       "-" #'split-window-below)
 
+
+(map! :leader
+      "e" #'+eshell/here)
 
 ;; TODO eh, not convinced it's the right way, but at least works
 (after! evil-org-agenda
@@ -87,3 +86,9 @@
 (after! so-long
   ;; was messing with org-mode... wonder if I can adjust it just for org
   (setq so-long-threshold 1000))
+
+
+;; TODO open an issue in doom emacs? seems like a wrong regex for helm
+;; https://github.com/cosmicexplorer/helm-rg/blob/master/helm-rg.el#L865
+(with-eval-after-load 'helm-rg
+  (set-popup-rule! "^*helm-rg" :ttl nil :select t :size 0.45))

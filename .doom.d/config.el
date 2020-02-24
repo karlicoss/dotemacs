@@ -94,3 +94,7 @@
   (set-popup-rules!
     '(("^CAPTURE.*\\.org$"  :ignore t)
       ("^CAPTURE-.*\\.org$" :size 0.25 :quit nil :select t :autosave t))))
+
+
+(after! evil
+  (evil-ex-define-cmd "ww" #'save-some-buffers))

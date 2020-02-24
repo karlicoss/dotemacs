@@ -514,7 +514,23 @@
   (evil-global-set-key 'insert (kbd "C-t") #'my/now))
 
 
+;; TODO colors should depend on light/dark?
+(defvar --my/org-priority-map
+  '(("0" ""            'remove)
+    ("1" "orange red"  ?A)
+    ("2" "yellow3"     ?B)
+    ("3" "dark orange" ?C)
+    ("4" "RoyalBlue2"  ?D)
+    ("5" ""            ?E)))
+
 (after! org
+
+  (loop for (key col sym) in --my/org-priority-map do
+        (map! :map org-mode-map
+              :localleader
+              key `(lambda () (interactive) (org-priority ,sym))))
+
+
   (map! :map org-mode-map
         :localleader
 

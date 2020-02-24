@@ -1,7 +1,6 @@
 ;;; init.el -*- lexical-binding: t; -*-
 
-;; This file controls what Doom modules are enabled and what order they load in.
-;; Remember to run 'doom sync' after modifying it!
+;; NOTE: run doom sync after changing these
 
 ;; NOTE 'SPC h d h' to access Doom's documentation.
 ;; NOTE Move your cursor over a module's name (or its flags) and press 'K' (or
@@ -87,8 +86,7 @@
        ;;gist              ; interacting with github gists
        (lookup           ; helps you navigate your code and documentation
         +docsets)        ; ...or in Dash docsets locally
-       ;; TODO
-       ;;lsp
+       lsp
        magit             ; a git porcelain for Emacs
        ;;pdf               ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
@@ -103,11 +101,9 @@
        ;;cc                ; C/C++/Obj-C madness
        ;;coq               ; proofs-as-programs
        data              ; config/data formats
-       emacs-lisp        ; drown in parentheses
-       ;;(haskell +dante)  ; a language that's lazier than I am
-       ;;hy                ; readability of scheme w/ speed of python
-       ;;javascript        ; all(hope(abandon(ye(who(enter(here))))))
-       ;;lean
+       emacs-lisp
+       ;;(haskell +dante)
+       javascript
        ;;ledger            ; an accounting system in Emacs
        markdown          ; writing docs for people to ignore
        ;;nix               ; I hereby declare "nix geht mehr!"
@@ -116,10 +112,12 @@
 	;; TODO huh?
         ;;+jupyter        ; ipython/jupyter support for babel
         +present)        ; using org-mode for presentations
-       python            ; beautiful is better than ugly
-       ;;rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
+       (python            ; beautiful is better than ugly
+        +lsp)
        sh                ; she sells {ba,z,fi}sh shells on the C xor
        web               ; the tubes
+       
+       ;;rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
 
        :email
        ;;(mu4e +gmail)

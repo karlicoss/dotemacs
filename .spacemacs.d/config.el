@@ -565,7 +565,8 @@
   "q q" #'kill-emacs)
 
 
-
+;; TODO use doom bindings?
 (global-set-key (kbd "<f1>") #'my/search)
 (global-set-key (kbd "<f3>") #'my/search-code)
+(global-set-key (kbd "<f4>") #'org-capture)
 ;;;

@@ -92,3 +92,13 @@
 ;; https://github.com/cosmicexplorer/helm-rg/blob/master/helm-rg.el#L865
 (with-eval-after-load 'helm-rg
   (set-popup-rule! "^*helm-rg" :ttl nil :select t :size 0.45))
+
+(map! :n "zz" #'org-capture)
+
+;; TODO open issue in doom emacs?
+;; must be really annoying that capture.org is always opened in a popup?
+;; TODO I suppose case insensitivity doesn't help
+(after! org
+  (set-popup-rules!
+    '(("^CAPTURE.*\\.org$"  :ignore t)
+      ("^CAPTURE-.*\\.org$" :size 0.25 :quit nil :select t :autosave t))))

@@ -231,6 +231,9 @@
   (interactive)
   (setq org-agenda-files (my/org-agenda-files-get)))
 
+(after! org-agenda
+  (my/org-agenda-files-refresh))
+
 
 ;; TODO private groups (with fallback)?
 (setq org-super-agenda-groups
@@ -506,14 +509,17 @@
 ;;                         (interactive)
 ;;                         (--my/org-agenda-postpone ,days)))
 
+
+;; TODO ugh. why didn't top level loop and (map! :after org-agenda) work??
+;; some error about 'days' undefined..
 (after! org-agenda
   (loop for days from 0 to 9
-        do (evil-define-key 'motion evil-org-agenda-mode-map
-             (format "%d" days)
-             `(lambda ()
-                ,(format "Schedule %d days later" days)
-                (interactive)
-                (--my/org-agenda-postpone ,days)))))
+        do (map! :map org-agenda-mode-map
+                 :m (format "%d" days)
+                 `(lambda ()
+                    ,(format "Schedule %d days later" days)
+                    (interactive)
+                    (--my/org-agenda-postpone ,days)))))
 
 
 (with-eval-after-load 'evil

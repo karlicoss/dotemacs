@@ -537,17 +537,22 @@
 (with-eval-after-load 'evil
   (evil-global-set-key 'insert (kbd "C-t") #'my/now))
 
-
-;; TODO colors should depend on light/dark?
+;; colors borrowed from doom
+;; TODO ugh. how to reuse doom colors without hardcoding?
 (defvar --my/org-priority-map
-  '(("0" ""            'remove)
-    ("1" "orange red"  ?A)
-    ("2" "yellow3"     ?B)
-    ("3" "dark orange" ?C)
-    ("4" "RoyalBlue2"  ?D)
-    ("5" ""            ?E)))
+  '(("0" ""        'remove)
+    ("1" "#ff6c6b" ?A)   ;; red
+    ("2" "#da8548" ?B)   ;; organge
+    ("3" "#ecbe7b" ?C)   ;; yellow
+    ("4" "#51afef" ?D)   ;; blue
+    ("5" "#2257ao" ?E))) ;; dark-blue
 
 (after! org
+
+  (setq org-priority-faces
+        (loop for (_ col sym) in --my/org-priority-map
+              collect
+              `(,sym . ,col)))
 
   (loop for (key col sym) in --my/org-priority-map do
         (map! :map org-mode-map

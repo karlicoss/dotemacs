@@ -365,14 +365,26 @@
         '(("t"
            "todo"
            entry
-           (file my-org-notes-file) ;; TODO rename to --my
+           (file --my/org-capture-file)
            "* TODO %? %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n")
 
           ("n"
            "note"
            entry
-           (file my-org-notes-file)
-           "* %? %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n")))
+           (file --my/org-capture-file)
+           "* %? %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n")
+
+          ("l"
+           "log entry"
+           entry
+           (file --my/org-capture-log-file)
+           "* %U %? %^g\n")
+
+          ("w"
+           "workout"
+           entry
+           (file --my/org-capture-workouts-file)
+           "* %U %? :wlog:\n")))
 
 
   ;; TODO hmm, is there a way to load lazily?

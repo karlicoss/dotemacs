@@ -333,6 +333,10 @@
   (load "~/dotfiles-emacs/org.el")
   ;; TODO ugh. I'm really not sure how should I organize my config...
 
+  ;; TODO contribute to doom?
+  ;; wonder if we can make it equal to python-shell-interpreter somehow?
+  (setq org-babel-python-command "python3")
+
   ;; TODO not sure with doom's after! keyword, when it's the right time to do this really...
   (setq org-todo-keywords '((sequence
                              "TODO(t)"

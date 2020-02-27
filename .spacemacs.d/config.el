@@ -557,6 +557,15 @@
   ;; TODO ugh. need to inject it into Doom theme somehow
   ;; otherwise it's lost on theme switching
 
+
+  ;; TODO not sure what's the precise difference between link and org-link
+  (set-face-attribute 'link nil
+                      ;; TODO mm. it's a bit sad wave is too spammy, dashed would be perfect
+                      ;; :underline '(:color "red" :style wave)
+                      :underline nil
+                      :bold t
+                      :foreground "royal blue")
+
   ;; default doom is yellow, so too bright
   (set-face-attribute 'org-date nil
                       :foreground --my/grey)

@@ -1,15 +1,8 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; $DOOMDIR/packages.el
 
-;; This is where you install packages, by declaring them with the `package!'
-;; macro, then running 'doom refresh' on the command line. You'll need to
-;; restart Emacs for your changes to take effect! Or at least, run M-x
-;; `doom/reload'.
-;;
+;; NOTE you need 'doom refresh' and 'doom/reload' after changing this file
 ;; WARNING: Don't disable core packages listed in ~/.emacs.d/core/packages.el.
-;; Doom requires these, and disabling them may have terrible side effects.
-;;
-;; Here are a couple examples:
 
 
 ;; All of Doom's packages are pinned to a specific commit, and updated from
@@ -59,8 +52,9 @@
 ;; https://github.com/hlissner/doom-emacs/issues/1946
 (package! evil-escape :disable t)
 
-(package! el-patch)
 (package! org-sync
   :recipe (:host github :repo "karlicoss/org-sync" :branch "fix-nondeterminism"))
 
+(package! el-patch)
 (package! org-super-agenda)
+(package! org-ql)

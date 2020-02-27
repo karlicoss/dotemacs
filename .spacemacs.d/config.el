@@ -545,13 +545,26 @@
 ;; TODO ugh. how to reuse doom colors without hardcoding?
 (defvar --my/org-priority-map
   '(("0" ""        'remove)
-    ("1" "#ff6c6b" ?A)   ;; red
+    ("1" "#ff6c6b" ?A)   ;; red ;; TODO also make bold?
     ("2" "#da8548" ?B)   ;; organge
     ("3" "#ecbe7b" ?C)   ;; yellow
     ("4" "#51afef" ?D)   ;; blue
     ("5" "#2257ao" ?E))) ;; dark-blue
 
+(setq --my/grey "#65696e")
+
 (after! org
+  ;; TODO ugh. need to inject it into Doom theme somehow
+  ;; otherwise it's lost on theme switching
+
+  ;; default doom is yellow, so too bright
+  (set-face-attribute 'org-date nil
+                      :foreground --my/grey)
+
+  ;; kinda violet color. default Doom is grey and very pale
+  (set-face-attribute 'org-tag nil
+                      :foreground "#c56ec3"
+                      :weight 'bold)
 
   (setq org-priority-faces
         (loop for (_ col sym) in --my/org-priority-map

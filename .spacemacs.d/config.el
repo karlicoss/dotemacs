@@ -557,6 +557,14 @@
   ;; TODO ugh. need to inject it into Doom theme somehow
   ;; otherwise it's lost on theme switching
 
+  ;; apparently org-level-N is org-mode specific whereas outline-N is something lower level
+  (loop for level from 1 to 7
+        ;; TODO why is doom complaining at level and saying 'reference to a free variable'??
+        do (set-face-attribute (intern-soft (format "outline-%d" level)) nil
+                               :foreground nil))
+
+  ;; TODO no clue why that doesn't work. it just says "invalid face: outline-1"
+  ;; (set-face-attribute `,(make-symbol "outline-1") nil :foreground nil)
 
   ;; TODO not sure what's the precise difference between link and org-link
   (set-face-attribute 'link nil

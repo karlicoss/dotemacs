@@ -616,24 +616,24 @@
   (defalias '--set-leader-keys #'spacemacs/set-leader-keys))
 
 (--set-leader-keys
-  "A"   #'my/switch-to-agenda
+ "A"   #'my/switch-to-agenda
 
 
-  "RET" #'helm-swoop
-  "S s" #'my/search
-  "S c" #'my/search-code
-  "S q" #'my/org-ql-search
-  "S t" #'my/org-ql-search-tags
+ "RET" #'helm-swoop
+ "S s" #'my/search
+ "S c" #'my/search-code
+ "S q" #'my/org-ql-search
+ "S t" #'my/org-ql-search-tags
 
-  ;; TODO shit! configure other engines as well
-  ;; lets you enger an interactive query
-  "s G" #'engine/search-google
+ ;; TODO shit! configure other engines as well
+ ;; lets you enger an interactive query
+ "s G" #'engine/search-google
 
-  ;; TODO extract search-hotkeys so it's easy to extract for the post?
-  "p P" #'helm-projectile-find-file-in-known-projects
+ ;; TODO extract search-hotkeys so it's easy to extract for the post?
+ "p P" #'helm-projectile-find-file-in-known-projects
 
-  ; TODO link to my post?
-  "q q" #'kill-emacs)
+ ;; TODO link to my post?
+ "q q" #'kill-emacs)
 
 
 ;; TODO use doom bindings?

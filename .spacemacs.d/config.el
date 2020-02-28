@@ -329,6 +329,12 @@
   (my/org-ql-search (format "tags:%s" tags) :sort 'priority))
 
 
+(cl-defun my/org-ql-helm ()
+  (interactive)
+  (require 'helm-org-ql)
+  (helm-org-ql (my/org-files-in my/search-targets :follow t)))
+
+
 (with-eval-after-load 'org
   (load "~/dotfiles-emacs/org.el")
   ;; TODO ugh. I'm really not sure how should I organize my config...
@@ -622,6 +628,7 @@
  "RET" #'helm-swoop
  "S s" #'my/search
  "S c" #'my/search-code
+ "S h" #'my/org-ql-helm
  "S q" #'my/org-ql-search
  "S t" #'my/org-ql-search-tags
 

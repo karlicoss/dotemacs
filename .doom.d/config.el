@@ -88,13 +88,20 @@
 
 (map! :n "zz" #'org-capture)
 
-;; TODO open issue in doom emacs?
-;; must be really annoying that capture.org is always opened in a popup?
-;; TODO I suppose case insensitivity doesn't help
-(after! org
-  (set-popup-rules!
-    '(("^CAPTURE.*\\.org$"  :ignore t)
-      ("^CAPTURE-.*\\.org$" :size 0.25 :quit nil :select t :autosave t))))
+
+
+;; fix case insensitivity in popup detection
+;; (after! org
+;;   (set-popup-rules!
+;;     '(("^CAPTURE.*\\.org$"  :ignore t)
+;;       ("^CAPTURE-.*\\.org$" :size 0.25 :quit nil :select t :autosave t))
+
+;; right, this seems like a better fix
+;; see https://github.com/hlissner/doom-emacs/pull/2619#issuecomment-592186770
+(defadvice! +popup--make-case-sensitive-a (orig-fn &rest args)
+  :around #'display-buffer-assq-regexp
+  (let (case-fold-search)
+    (apply orig-fn args)))
 
 
 (after! evil

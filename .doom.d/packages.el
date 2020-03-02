@@ -58,3 +58,4 @@
 (package! el-patch)
 (package! org-super-agenda)
 (package! org-ql)
+(package! helm-swoop)

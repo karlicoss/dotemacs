@@ -370,31 +370,36 @@
   ;; TODO investigate later
   (setq org-id-track-globally nil)
 
+  ;; for private capture templates
+  (defvar --my/extra-capture-templates '())
+
   ;; TODO merge with private
   (setq org-capture-templates
-        '(("t"
-           "todo"
-           entry
-           (file --my/org-capture-file)
-           "* TODO %? %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n")
+        (-concat
+         '(("t"
+            "todo"
+            entry
+            (file --my/org-capture-file)
+            "* TODO %? %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n")
 
-          ("n"
-           "note"
-           entry
-           (file --my/org-capture-file)
-           "* %? %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n")
+           ("n"
+            "note"
+            entry
+            (file --my/org-capture-file)
+            "* %? %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n")
 
-          ("l"
-           "log entry"
-           entry
-           (file --my/org-capture-log-file)
-           "* %U %? %^g\n")
+           ("l"
+            "log entry"
+            entry
+            (file --my/org-capture-log-file)
+            "* %U %? %^g\n")
 
-          ("w"
-           "workout"
-           entry
-           (file --my/org-capture-workouts-file)
-           "* %U %? :wlog:\n")))
+           ("w"
+            "workout"
+            entry
+            (file --my/org-capture-workouts-file)
+            "* %U %? :wlog:\n"))
+         --my/extra-capture-templates))
 
 
   ;; TODO hmm, is there a way to load lazily?

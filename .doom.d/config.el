@@ -43,8 +43,7 @@
 
 
 (load! "../configs/emacs/private.el")
-(load! "../dotfiles-emacs/.spacemacs.d/config.el")
-;; TODO move confil.el to root?
+(load! "../dotfiles-emacs/.emacs.d/config.el")
 
 
 (after! so-long

@@ -1,9 +1,8 @@
-; refined init.el, gradually will mode all of my config here
-; loaded in dotspacemacs/user-config
+;; refined init.el, gradually will mode all of my config here
 
 ;;; random helpers
 
-; TODO should this be macro??
+;; TODO should this be macro??
 (cl-defun with-error-on-user-prompt (body)
   "Suppress user prompt and throw error instead. Useful when we really want to avoid prompts, e.g. in non-interactive functions"
   (interactive)
@@ -613,34 +612,29 @@
         "<" #'org-promote-subtree
         "," #'my/org-quicknote))
 
-(if (boundp 'doom-version)
-    (defun     --set-leader-keys (&rest args) ()) ;; TODO warn??
-  (defalias '--set-leader-keys #'spacemacs/set-leader-keys))
 
-(--set-leader-keys
- "A"   #'my/switch-to-agenda
-
-
- "RET" #'helm-swoop
- "S s" #'my/search
- "S c" #'my/search-code
- "S h" #'my/org-ql-helm
- "S q" #'my/org-ql-search
- "S t" #'my/org-ql-search-tags
-
- ;; TODO shit! configure other engines as well
- ;; lets you enger an interactive query
- "s G" #'engine/search-google
-
- ;; TODO extract search-hotkeys so it's easy to extract for the post?
- "p P" #'helm-projectile-find-file-in-known-projects
-
- ;; TODO link to my post?
- "q q" #'kill-emacs)
+(map! :leader
+      "RET" #'helm-swoop
+      "S s" #'my/search
+      "S c" #'my/search-code
+      "S h" #'my/org-ql-helm
+      "S q" #'my/org-ql-search
+      "S t" #'my/org-ql-search-tags
+      "A"   #'my/switch-to-agenda)
 
 
-;; TODO use doom bindings?
-(global-set-key (kbd "<f1>") #'my/search)
-(global-set-key (kbd "<f3>") #'my/search-code)
-(global-set-key (kbd "<f4>") #'org-capture)
+(map! "<f1>" #'my/search
+      "<f3>" #'my/search-code
+      "<f4>" #'org-capture)
+
+;; TODO shit! configure other engines as well
+;; lets you enger an interactive query
+;; "s G" #'engine/search-google
+
+;; TODO extract search-hotkeys so it's easy to extract for the post?
+;; "p P" #'helm-projectile-find-file-in-known-projects
+;;
+;; TODO link to my post?
+;; "q q" #'kill-emacs
+
 ;;;

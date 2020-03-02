@@ -539,6 +539,13 @@
                     (--my/org-agenda-postpone ,days)))))
 
 
+;; TODO eh, not convinced it's the right way, but at least works
+(after! evil-org-agenda
+  (evil-define-key 'motion evil-org-agenda-mode-map
+    "S" #'org-save-all-org-buffers
+    "U" #'my/org-agenda-unschedule))
+
+
 (with-eval-after-load 'evil
   (evil-global-set-key 'insert (kbd "C-t") #'my/now))
 
@@ -613,6 +620,34 @@
         "," #'my/org-quicknote))
 
 
+;; TODO use (loop for i from 1 to 10 do (map!... )) ??
+(map! :leader
+      "0" #'winum-select-window-0-or-10
+      "1" #'winum-select-window-1
+      "2" #'winum-select-window-2
+      "3" #'winum-select-window-3
+      "4" #'winum-select-window-4
+      "5" #'winum-select-window-5
+      "6" #'winum-select-window-6
+      "7" #'winum-select-window-7
+      "8" #'winum-select-window-8
+      "9" #'winum-select-window-9)
+
+
+(map! :map evil-window-map
+      "/" #'split-window-right
+      "-" #'split-window-below)
+
+
+(map! :leader
+      "/" #'+default/search-project
+      "e" #'+eshell/here)
+
+
+(map! :n
+      "zz" #'org-capture)
+
+
 (map! :leader
       "RET" #'helm-swoop
       "S s" #'my/search
@@ -626,6 +661,11 @@
 (map! "<f1>" #'my/search
       "<f3>" #'my/search-code
       "<f4>" #'org-capture)
+
+
+(after! evil
+  (evil-ex-define-cmd "ww" #'save-some-buffers))
+
 
 ;; TODO shit! configure other engines as well
 ;; lets you enger an interactive query

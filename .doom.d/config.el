@@ -47,35 +47,6 @@
 ;; TODO move confil.el to root?
 
 
-;; TODO use (loop for i from 1 to 10 do (map!... )) ??
-(map! :leader
-      "0" #'winum-select-window-0-or-10
-      "1" #'winum-select-window-1
-      "2" #'winum-select-window-2
-      "3" #'winum-select-window-3
-      "4" #'winum-select-window-4
-      "5" #'winum-select-window-5
-      "6" #'winum-select-window-6
-      "7" #'winum-select-window-7
-      "8" #'winum-select-window-8
-      "9" #'winum-select-window-9)
-
-(map! :map evil-window-map
-      "/" #'split-window-right
-      "-" #'split-window-below)
-
-
-(map! :leader
-      "/" #'+default/search-project
-      "e" #'+eshell/here)
-
-;; TODO eh, not convinced it's the right way, but at least works
-(after! evil-org-agenda
-  (evil-define-key 'motion evil-org-agenda-mode-map
-    "S" #'org-save-all-org-buffers
-    "U" #'my/org-agenda-unschedule))
-
-
 (after! so-long
   ;; was messing with org-mode... wonder if I can adjust it just for org
   (setq so-long-threshold 1000))
@@ -85,9 +56,6 @@
 ;; https://github.com/cosmicexplorer/helm-rg/blob/master/helm-rg.el#L865
 (with-eval-after-load 'helm-rg
   (set-popup-rule! "^*helm-rg" :ttl nil :select t :size 0.45))
-
-(map! :n "zz" #'org-capture)
-
 
 
 ;; fix case insensitivity in popup detection
@@ -103,6 +71,3 @@
   (let (case-fold-search)
     (apply orig-fn args)))
 
-
-(after! evil
-  (evil-ex-define-cmd "ww" #'save-some-buffers))

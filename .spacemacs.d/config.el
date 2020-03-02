@@ -48,26 +48,17 @@
   (my/files-in path :exts (if archive '("org" "org_archive") '("org")) :follow follow))
 
 
-
-(with-eval-after-load 'helm
-  ;; patch spacemacs/helm-files-do-rg to support extra targets argument used in --my/helm-files-do-rg
-  (load-file "~/dotfiles-emacs/patch-helm.el"))
-
-
-;; TODO rename from helm-files-do-rg?
-;; TODO FIXME follow mode
+;; TODO split at least at half
 (cl-defun --my/helm-files-do-rg (dir &key (targets nil) (rg-opts nil))
   "Helper function to aid with passing extra arguments to ripgrep"
   (require 'helm-rg)
   ;; TODO need to ignore # files?
-  (let ((helm-ag-command-option (s-join " " rg-opts))
-        (helm-rg--extra-args    (s-join " " rg-opts))
+  (let ((helm-rg-default-extra-args rg-opts)
         (helm-rg-default-directory dir))
-    ;; NOTE: spacemacs/helm-files-do-rg is patched to support second argument with multiple directories
-    ;; (see patch-helm.el)
-    (helm-rg "")))
-;; TODO FIXME I guess need interactive??
-;; TODO FIXME find-code
+    (helm-rg
+     nil ;; pattern
+     nil ;; pfx
+     targets)))
 
 
 (defun --my/find-file-defensive (f)

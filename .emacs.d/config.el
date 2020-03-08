@@ -484,6 +484,9 @@
 ;; otherwise it's just 'emacs'
 (setq frame-title-format "emacs: %b %f")
 
+
+(setq yas-snippet-dirs '("~/dotfiles-emacs/.emacs.d/snippets"))
+
 ;;;
 
 

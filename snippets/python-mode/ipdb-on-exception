@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+#name : ipdb on exception
+#key : ie
+#contributor : karlicos
+# --
+import sys; exec("global info\ndef info(type, value, tb):\n    import ipdb, traceback; traceback.print_exception(type, value, tb); ipdb.pm()"); sys.excepthook = info # type: ignore

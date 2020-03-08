@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+#name : ipdb with ipython
+#key : ii
+#contributor : karlicos
+# --
+from IPython import embed as ip; import ipdb; ipdb.set_trace()

@@ -1,4 +1,10 @@
-(defun org-ql-view--format-element (element)
+;; reason for patching: no support for filename in the result list
+;; TODO merge in upstream? or suggest some more flexible api
+
+(el-patch-feature org-ql-view)
+(with-eval-after-load 'org-ql-view
+
+(el-patch-defun org-ql-view--format-element (element)
   ;; This essentially needs to do what `org-agenda-format-item' does,
   ;; which is a lot.  We are a long way from that, but it's a start.
   "Return ELEMENT as a string with text-properties set by its property list.
@@ -74,3 +80,5 @@ return an empty string."
              'todo-state todo-keyword
              'tags tag-list
              'org-habit-p habit-property)))))
+
+)

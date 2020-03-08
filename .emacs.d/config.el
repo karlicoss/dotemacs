@@ -1,5 +1,7 @@
 ;; refined init.el, gradually will mode all of my config here
 
+(load "~/dotfiles-emacs/.emacs.d/patches/org-ql-view.el")
+
 ;;; random helpers
 
 ;; TODO should this be macro??

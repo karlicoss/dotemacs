@@ -59,6 +59,7 @@ return an empty string."
                               (s-wrap it ":")
                               (org-add-props it nil 'face 'org-tag))))
            ;;  (category (org-element-property :category element))
+	   (el-patch-add (filename (file-name-base (buffer-file-name (marker-buffer (org-element-property :org-marker element))))))
            (priority-string (-some->> (org-element-property :priority element)
                                       (char-to-string)
                                       (format "[#%s]")
@@ -69,7 +70,7 @@ return an empty string."
            (due-string (pcase (org-element-property :relative-due-date element)
                          ('nil "")
                          (string (format " %s " (org-add-props string nil 'face 'org-ql-view-due-date)))))
-           (string (s-join " " (-non-nil (list todo-keyword priority-string title due-string tag-string)))))
+           (string (s-join " " (-non-nil (list (el-patch-add filename) todo-keyword priority-string title due-string tag-string)))))
       (remove-list-of-text-properties 0 (length string) '(line-prefix) string)
       ;; Add all the necessary properties and faces to the whole string
       (--> string

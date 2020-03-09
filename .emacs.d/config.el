@@ -174,7 +174,7 @@
 ;; TODO need to fix resume to remember latest tag? not sure why it's broken..
 (with-eval-after-load 'org-drill
   ;; load patch that makes org-drill detect and present empty cards (without body)
-  (load "~/dotfiles-emacs/patch-org-drill.el")
+  (load "~/dotfiles-emacs/.emacs.d/patches/org-drill.el")
   (add-to-list
    'org-drill-card-type-alist
    '(nil org-drill-present-simple-card nil t))

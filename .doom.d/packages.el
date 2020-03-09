@@ -59,3 +59,4 @@
 (package! org-super-agenda)
 (package! org-ql)
 (package! helm-swoop)
+(package! org-drill)

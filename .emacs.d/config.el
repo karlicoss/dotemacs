@@ -242,14 +242,22 @@
                :order 999))) ;; sink drill all the way down
 
 
+(setq my/private-tags '("pr" "prv" "private"))
+
+;; TODO use different buffer name? so persistent agenda is not miced with org tags search
 ;; TODO hotkey to toggle private/non private?
 (defun my/agenda (&optional arg)
   (interactive "P")
-  (require 'org-agenda) ;; TODO require super agenda??
-  (let ((org-agenda-tag-filter-preset '("-prv"))
-        (org-agenda-window-setup 'only-window)) ;; TODO ??
+  (let ((org-agenda-window-setup 'only-window)) ;; TODO ??
+    (require 'org-super-agenda)
     (org-super-agenda-mode) ;; only use org-super-agenda for global agenda
     (org-agenda arg "a")))
+
+(defun my/agenda-public (&optional arg)
+  (interactive "P")
+  (let ((org-agenda-tag-filter-preset (-map (lambda (s) (concat "-" s)) my/private-tags)))
+    (my/agenda arg)))
+
 
 (defun my/switch-to-agenda ()
   "launch agenda unless it's already running"
@@ -301,7 +309,7 @@
 
 ;;; org styling
 (with-eval-after-load 'org
-  (dolist (tag '("pr" "prv" "private"))
+  (dolist (tag my/private-tags)
     (add-to-list 'org-tag-faces
                  `(,tag . (:foreground "red" :weight bold)))))
 

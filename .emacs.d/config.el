@@ -179,6 +179,9 @@
    'org-drill-card-type-alist
    '(nil org-drill-present-simple-card nil t))
 
+  (setq  org-drill-left-cloze-delimiter "{")
+  (setq org-drill-right-cloze-delimiter "}")
+
   ;; hack to exclude items that I'm done with (i.e. marked as DONE/CANCEL)
   (defun org-drill-entry-p (&optional marker)
     (interactive)

@@ -242,27 +242,32 @@
                :order 999))) ;; sink drill all the way down
 
 
-(setq my/private-tags '("pr" "prv" "private"))
+(setq my/org-private-tags '("pr" "prv" "private"))
+(setq my/org-agenda-buffer-name "*My Agenda*") ;; global/persistent agenda
 
 ;; TODO use different buffer name? so persistent agenda is not miced with org tags search
 ;; TODO hotkey to toggle private/non private?
 (defun my/agenda (&optional arg)
   (interactive "P")
-  (let ((org-agenda-window-setup 'only-window)) ;; TODO ??
+  (let ((org-agenda-window-setup 'only-window) ;; TODO ??
+        ;; not sure why tmp works properly unline without tmp? something to do with sticky buffers?
+        (org-agenda-buffer-tmp-name  my/org-agenda-buffer-name))
     (require 'org-super-agenda)
     (org-super-agenda-mode) ;; only use org-super-agenda for global agenda
     (org-agenda arg "a")))
 
 (defun my/agenda-public (&optional arg)
   (interactive "P")
-  (let ((org-agenda-tag-filter-preset (-map (lambda (s) (concat "-" s)) my/private-tags)))
+  (let ((org-agenda-tag-filter-preset (-map (lambda (s) (concat "-" s)) my/org-private-tags)))
     (my/agenda arg)))
 
 
 (defun my/switch-to-agenda ()
   "launch agenda unless it's already running"
   (interactive)
-  (if (get-buffer "*Org Agenda*") (switch-to-buffer "*Org Agenda*") (my/agenda)))
+  (if (get-buffer my/org-agenda-buffer-name)
+      (switch-to-buffer my/org-agenda-buffer-name)
+    (my/agenda)))
 
 ;;;
 
@@ -309,7 +314,7 @@
 
 ;;; org styling
 (with-eval-after-load 'org
-  (dolist (tag my/private-tags)
+  (dolist (tag my/org-private-tags)
     (add-to-list 'org-tag-faces
                  `(,tag . (:foreground "red" :weight bold)))))
 

@@ -58,3 +58,7 @@
 
 (after! org-ql-view
   (set-popup-rule! "^*Org QL View:" :ignore t))
+
+
+(after! org-agenda
+  (set-popup-rule! my/org-agenda-buffer-name :ignore t))

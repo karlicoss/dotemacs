@@ -634,6 +634,7 @@
         ;; doom maps to refile menu by default
         "r" #'org-refile
 
+        "x" #'org-cut-subtree
         "u" #'my/org-unschedule
         "X" #'my/org-wipe-subtree
         ">" #'org-demote-subtree

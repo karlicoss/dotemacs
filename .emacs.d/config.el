@@ -477,6 +477,12 @@
 ;;;
 
 ;;; misc stuff
+
+
+;; 80 is really annoying...
+;; TODO no idea why is setq-default instead of setq necessary??
+(setq-default fill-column 200)
+
 (defun my/now ()
   "Insert current timestamp in org-mode format"
   (interactive)

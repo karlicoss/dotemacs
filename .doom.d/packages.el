@@ -56,7 +56,9 @@
   :recipe (:host github :repo "karlicoss/org-sync" :branch "fix-nondeterminism"))
 
 (package! el-patch)
+(package! helm-swoop)
+
 (package! org-super-agenda)
 (package! org-ql)
-(package! helm-swoop)
+(package! org-sidebar)
 (package! org-drill)

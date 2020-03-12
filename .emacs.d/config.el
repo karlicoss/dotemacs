@@ -525,6 +525,13 @@
   (setq graphviz-dot-preview-extension "svg"))
 
 
+;;; projectile
+(after! projectile
+  ;; don't think caching works well, often it presents outdated stuff
+  (setq projectile-enable-caching nil))
+
+;;;
+
 ;;; keybindings etc
 
 (defun my/org-agenda-unschedule ()

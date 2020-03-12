@@ -639,15 +639,20 @@
 
         ;; doom maps to clocking menu by deafult
         "c" #'my/org-inline-created
+
+        ;; TODO not sure
         ;; doom maps to refile menu by default
-        "r" #'org-refile
+        ;; "r" #'org-refile
+        "," #'org-refile
 
         "x" #'org-cut-subtree
         "u" #'my/org-unschedule
         "X" #'my/org-wipe-subtree
         ">" #'org-demote-subtree
         "<" #'org-promote-subtree
-        "," #'my/org-quicknote))
+
+        ;; doom maps to org-store-link by default
+        "n" #'my/org-quicknote))
 
 
 ;; TODO use (loop for i from 1 to 10 do (map!... )) ??

@@ -478,6 +478,8 @@
 
 ;;; misc stuff
 
+;; don't think I'm short on inotify handles..
+(global-auto-revert-mode)
 
 ;; 80 is really annoying...
 ;; TODO no idea why is setq-default instead of setq necessary??

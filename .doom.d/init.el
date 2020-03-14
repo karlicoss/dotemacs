@@ -88,7 +88,7 @@
        sh                ; she sells {ba,z,fi}sh shells on the C xor
        web ;; TODO not sure? do I need it or js is enough?
        
-       ;;rust
+       rust
 
        :email
        ;;(mu4e +gmail)

@@ -59,8 +59,7 @@
        :checkers
        syntax              ; tasing you for every semicolon you forget
        ;;spell             ; tasing you for misspelling mispelling
-       ;; TODO !!
-       ;;grammar           ; tasing grammar mistake every you make
+       grammar           ;; languagetool/writegood mode
 
        :tools
        ;;debugger          ; FIXME stepping through code, to help you add bugs

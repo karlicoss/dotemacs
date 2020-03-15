@@ -57,8 +57,8 @@
        eshell            ; a consistent, cross-platform shell (WIP)
 
        :checkers
-       syntax              ; tasing you for every semicolon you forget
-       ;;spell             ; tasing you for misspelling mispelling
+       syntax
+       spell             ;; flycheck?
        grammar           ;; languagetool/writegood mode
 
        :tools

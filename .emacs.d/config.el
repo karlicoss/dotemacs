@@ -331,6 +331,9 @@
 
 ;;; misc org stuff
 
+;; TODO think about it...
+(setq org-startup-folded nil)
+
 (cl-defun my/org-ql-search (query &rest args)
   (interactive)
   (require 'org-ql-search)

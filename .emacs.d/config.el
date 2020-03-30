@@ -159,7 +159,13 @@
   (interactive)
   (--my/helm-files-do-rg "/"
                          :targets (my/code-targets)
-                         :rg-opts '("-T" "txt" "-T" "md" "-T" "html" "-T" "org" "-g" "!*.org_archive")))
+                         :rg-opts '("-T" "txt"
+                                    "-T" "md"
+                                    "-T" "html"
+                                    "-T" "org"
+                                    "-g" "!*.org_archive"
+                                    ;; TODO this should be a special ripgrep type?
+                                    "-g" "!*.min.js")))
 
 
 (with-eval-after-load 'helm-ag

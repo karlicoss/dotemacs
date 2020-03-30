@@ -293,9 +293,6 @@
   (defun --my/get-opened-org-files ()
     (-non-nil (-distinct (-map #'buffer-file-name (org-buffer-list)))))
 
-  ;; I don't use cache because cache is only useful when you have to traverse filesystem to search for Org files
-  ;; without cache, it's much easier to discover new refile targets
-  (setq org-refile-use-cache nil)
   ;; I cache files contributing to refile here so I'm fine without refile cache.
   (setq --my/org-refile-targets (--my/get-org-refile-targets))
 
@@ -305,10 +302,22 @@
           (--my/get-opened-org-files :tag . "refile"))))
 
 
+(after! org
+  (defun my/org-refile-to-exobrain ()
+    (interactive)
+    (let* ((exobrain-files (my/org-files-in --my/exobrain-path))
+           (org-refile-targets '((exobrain-files :tag . "refile"))))
+      (org-refile))))
+
+
 (with-eval-after-load 'org
   ;; TODO eh
   ;; TODO call on timer?
   (--my/org-refile-targets-refresh)
+ 
+  ;; I don't use cache because cache is only useful when you have to traverse filesystem to search for Org files
+  ;; without cache, it's much easier to discover new refile targets
+  (setq org-refile-use-cache nil)
 
   ;; https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html
   (setq org-refile-use-outline-path 'buffer-name) ; otherwise you can't create a top level heading
@@ -664,6 +673,7 @@
         ;; doom maps to refile menu by default
         ;; "r" #'org-refile
         "," #'org-refile
+        "e" #'my/org-refile-to-exobrain
 
         "x" #'org-cut-subtree
         "u" #'my/org-unschedule

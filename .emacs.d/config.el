@@ -388,7 +388,7 @@
         org-log-states-order-reversed t) ;; default, but whatever
 
   (setq org-priority-lowest  ?E
-        org-priority-default ?C)
+        org-priority-default ?E)
 
   ;; eh, I'm not really using it and it breaks refiling for me due to
   ;; Debugger entered--Lisp error: (wrong-type-argument hash-table-p nil)

@@ -8,7 +8,10 @@
 (doom! :input
        :completion
        company ;; TODO do I need it with lsp?
-       helm
+       (helm)
+       ;; meh, fuzzy makes it pretty weird..
+       ;; +fuzzy)
+
        ;;ido               ; the other *other* search engine...
        ;;ivy               ; a search engine for love and life
 

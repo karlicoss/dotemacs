@@ -541,6 +541,10 @@
 
 ;;;
 
+
+(after! helm
+  helm-candidate-number-limit 100)
+
 ;;; keybindings etc
 
 (defun my/org-agenda-unschedule ()

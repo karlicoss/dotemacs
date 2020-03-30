@@ -62,3 +62,9 @@
 
 (after! org-agenda
   (set-popup-rule! my/org-agenda-buffer-name :ignore t))
+
+(after! undo-tree
+  ;; see https://github.com/hlissner/doom-emacs/issues/1407#issuecomment-491931901
+  (setq undo-limit 40000
+        undo-outer-limit 8000000
+        undo-strong-limit 100000))

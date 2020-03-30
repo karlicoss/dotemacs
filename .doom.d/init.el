@@ -34,7 +34,7 @@
        (window-select     ; visually switch windows
         +numbers)
        ;; TODO not sure if I want that..
-       workspaces        ; tab emulation, persistence & separate workspaces
+       ;; workspaces        ; tab emulation, persistence & separate workspaces
        ;;zen               ; distraction-free coding or writing
 
        :editor

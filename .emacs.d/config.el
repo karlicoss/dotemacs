@@ -297,9 +297,9 @@
   (setq --my/org-refile-targets (--my/get-org-refile-targets))
 
   (setq org-refile-targets
-        '((nil                       :maxlevel . 1)
-          (--my/org-refile-targets   :tag . "refile")
-          (--my/get-opened-org-files :tag . "refile"))))
+        '((nil                         :maxlevel . 1)
+          (--my/get-org-refile-targets :tag . "refile")
+          (--my/get-opened-org-files   :tag . "refile"))))
 
 
 (after! org

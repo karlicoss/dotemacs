@@ -732,6 +732,11 @@
   (evil-ex-define-cmd "ww" #'save-some-buffers))
 
 
+;; f2 for consistency with tmux
+;; interesting. not sure how, but this actually does manage to map all the workspace keys that are mapped by default
+(map! (:prefix-map ("<f2>" . "workspace")))
+
+
 ;; TODO shit! configure other engines as well
 ;; lets you enger an interactive query
 ;; "s G" #'engine/search-google

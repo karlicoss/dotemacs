@@ -298,14 +298,15 @@
 
   (setq org-refile-targets
         '((nil                         :maxlevel . 1)
-          (--my/get-org-refile-targets :tag . "refile")
-          (--my/get-opened-org-files   :tag . "refile"))))
+          (--my/get-org-refile-targets :tag . "refile"))))
+          ;; (--my/get-opened-org-files   :tag . "refile"))))
 
 
 (after! org
   (defun my/org-refile-to-exobrain ()
     (interactive)
     (let* ((exobrain-files (my/org-files-in --my/exobrain-path))
+           (org-refile-use-outline-path nil)
            (org-refile-targets '((exobrain-files :tag . "refile"))))
       (org-refile))))
 

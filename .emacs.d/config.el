@@ -704,6 +704,12 @@
       "-" #'split-window-below)
 
 
+
+(map! :leader
+      ;; default is switching buffer within the workspace, a bit annoying
+      "bb" #'switch-to-buffer)
+
+
 (map! :leader
       "/" #'+default/search-project
       "e" #'+eshell/here)

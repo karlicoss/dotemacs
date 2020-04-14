@@ -167,6 +167,11 @@
                                     ;; TODO this should be a special ripgrep type?
                                     "-g" "!*.min.js")))
 
+(defun my/helm-locate ()
+  "Default helm-locate uses global database, which contains too much garbage"
+  (interactive)
+  (helm-locate-with-db my/locate-database-path))
+
 
 (with-eval-after-load 'helm-ag
   ;; see helm-ag--construct-command. Not configurable otherwise ATM
@@ -727,7 +732,9 @@
       "S h" #'my/org-ql-helm
       "S q" #'my/org-ql-search
       "S t" #'my/org-ql-search-tags
-      "A"   #'my/switch-to-agenda)
+      "A"   #'my/switch-to-agenda
+      ;; overrides doom defaul
+      "s f" #'my/helm-locate)
 
 
 (map! "<f1>" #'my/search

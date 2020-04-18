@@ -524,6 +524,14 @@
   (interactive)
   (load-theme 'doom-one t))
 
+(defun my/org-less-colors ()
+  (interactive)
+  (loop for level from 1 to 7
+        ;; TODO why is doom complaining at level and saying 'reference to a free variable'??
+        do (set-face-attribute (intern-soft (format "outline-%d" level)) nil
+                               :weight 'normal
+                               :foreground "black")))
+
 
 (with-eval-after-load 'dired
   ;; show ISO time

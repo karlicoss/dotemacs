@@ -76,22 +76,25 @@
 ;; there is zero benefit of using Elisp for most of typical emacs configs; only obstacles.
 ;; can't say about other lisps, but very likely it's not very beneficial either
 
+(defun --my/search-git-repos-command ()
+  (combine-and-quote-strings
+   `(
+     "fdfind"
+     ;; match git dirs, excluding bare repositories (they don't have index)
+     "--hidden" "--full-path" "--type=f"
+     "'.git/index$'"
+     ,my/git-repos-search-root
+     "-x" "readlink" "-f" "'{//}'"))) ; resolve symlinks and chop off 'index'
+
 (defun --my/git-repos-refresh ()
-  (let ((search-git-repos-cmd (s-join " "
-                                      `(
-                                        "fdfind"
-                                        "--follow" ; follow symlink
-                                        ;; match git dirs, excluding bare repositories (they don't have index)
-                                        "--hidden" "--full-path" "--type f" "'.git/index$'"
-                                        ,(format "'%s'" my/git-repos-search-root)
-                                        "-x" "readlink" "-f" "'{//}'")))) ; resolve symlinks and chop off 'index'
+  (let ((command (--my/search-git-repos-command)))
     (progn
       (message "refreshing git repos...")
       (defconst *--my/git-repos*
         (-distinct
          (-map (lambda (x) (s-chop-suffix "/.git" x))
                (s-split "\n" ; remove duplicates due to symlinking
-                        (shell-command-to-string search-git-repos-cmd) t))))))) ; t for omit-nulls
+                        (shell-command-to-string command) t))))))) ; t for omit-nulls
 
 
 (defun my/code-targets ()

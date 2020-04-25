@@ -14,6 +14,7 @@
 
 
 ; omg why is elisp so shit...
+; TODO use my subprocess.el?
 (defun my/get-output (cmd)
   "shell-command-to-string mixes stderr and stdout, so we can't rely on it for getting filenames etc..
    It also ignores exit code.
@@ -182,6 +183,10 @@
     (concat "--glob=!" pattern)))
 ;;;
 
+(after! winum
+  (defun winum-assign-0-to-neotree ()
+    (when (string-match-p (buffer-name) ".*\\*NeoTree\\*.*") 10))
+  (add-to-list 'winum-assign-functions #'winum-assign-0-to-neotree))
 
 ;;; org-drill
 

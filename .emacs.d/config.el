@@ -732,6 +732,8 @@
 (map! :n
       "zz" #'org-capture)
 
+(map! :n
+      "RET" #'helm-swoop) ;; RET is useless in evil mode otherwise!
 
 (map! :leader
       "RET" #'helm-swoop

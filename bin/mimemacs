@@ -1,15 +1,22 @@
 #!/usr/bin/env python3
 '''
 This scripts allows triggering opening emacs from a link on a webpage/browser extension via MIME.
+Handles links like:
+
+   emacs:/path/tofile:123
+
+See test_parse_uri for more examples.
+
 To install (register the MIME handler), run
 
-   python3 mimemacs --install
+   python3 mimemacs --editor emacs --install
+
+You can use emacs/gvim as editors at the moment. If you want to add other editors, the code should be easy to follow.
 
 You can check that it works with
 
    xdg-open 'emacs:/path/to/some/file'
 
-See test_parse_uri for examples.
 
 I haven't found any existing mechanisms for this, please let me know if you know of any!
 
@@ -17,7 +24,7 @@ I haven't found any existing mechanisms for this, please let me know if you know
 # TODO make it editor-agnostic? although supporting line numbers will be trickier
 
 
-# TODO not sure if it should be emacs:// or something?
+# TODO not sure if it should be emacs:// or editor:?
 PROTOCOL = "emacs:"
 
 
@@ -57,7 +64,7 @@ line 2
 line 3 ---- THIS LINE SHOULD BE IN FOCUS!
 line 4
 '''.strip())
-        open_editor(f'emacs:{p}:3')
+        open_editor(f'emacs:{p}:3', editor='emacs')
 
 
 import argparse
@@ -69,18 +76,23 @@ import tempfile
 from urllib.parse import unquote
 
 
-def error(what) -> None:
+
+def notify(what) -> None:
     # notify-send used as a user-facing means of error reporting
     run(["notify-send", what])
+
+
+def error(what) -> None:
+    notify(what)
     raise RuntimeError(what)
 
 
-def install() -> None:
+def install(editor: str) -> None:
     this_script = str(Path(__file__).absolute())
     CONTENT = f"""
 [Desktop Entry]
 Name=Emacs Mime handler
-Exec=python3 {this_script} %u
+Exec=python3 {this_script} --editor {editor} %u
 Icon=emacs-icon
 Type=Application
 Terminal=false
@@ -98,7 +110,7 @@ MimeType=x-scheme-handler/emacs;
         ])
 
 
-from typing import Tuple, Optional
+from typing import Tuple, Optional, List
 Line = int
 File = str
 def parse_uri(uri: str) -> Tuple[File, Optional[Line]]:
@@ -123,14 +135,46 @@ def parse_uri(uri: str) -> Tuple[File, Optional[Line]]:
     return (uri, linenum)
 
 
-def open_editor(uri: str) -> None:
+def open_editor(uri: str, editor: str) -> None:
     uri, line = parse_uri(uri)
-    if line is None:
-        args = [uri]
-    else:
-        args = [f'+{line}', uri] # emacs specific syntax
 
-    emacs_cmd = [
+    if editor == 'emacs':
+        open_emacs(uri, line)
+    elif editor == 'gvim':
+        open_vim(uri, line)
+    else:
+        notify(f'Unexpected editor {editor}')
+        import shutil
+        for open_cmd in ['xdg-open', 'open']:
+            if shutil.which(open_cmd):
+                # sadly no generic way to handle line
+                check_call([open_cmd, uri])
+                break
+        else:
+            error('No xdg-open/open found!')
+
+
+def open_vim(uri: File, line: Optional[Line]) -> None:
+    args = [uri] if line is None else [f'+{line}', uri]
+    cmd = [
+        'gvim',
+        *args,
+    ]
+    check_call(cmd)
+    return
+
+    ## alternatively, if you prefer a terminal vim
+    cmd = [
+        'vim',
+        *args,
+    ]
+    launch_in_terminal(cmd)
+
+
+
+def open_emacs(uri: File, line: Optional[Line]) -> None:
+    args = [uri] if line is None else [f'+{line}', uri]
+    cmd = [
         'emacsclient',
         '--create-frame',
         # trick to run daemon if it isn't https://www.gnu.org/software/emacs/manual/html_node/emacs/emacsclient-Options.html
@@ -138,29 +182,33 @@ def open_editor(uri: str) -> None:
         *args,
     ]
     # todo exec?
-    check_call(emacs_cmd)
+    check_call(cmd)
     return
 
     ### alternatively, if you prefer a terminal emacs
-    emacs_cmd = [
+    cmd = [
         'emacsclient',
         '--tty',
         '--alternate-editor=""',
         *args,
     ]
+    launch_in_terminal(cmd)
+    ###
+
+def launch_in_terminal(cmd: List[str]):
     import shlex
     check_call([
         # NOTE: you might need xdg-terminal on some systems
         "x-terminal-emulator",
         "-e",
-        ' '.join(map(shlex.quote, emacs_cmd)),
+        ' '.join(map(shlex.quote, cmd)),
     ])
-    ###
-   
+
     
 
 def main():
     p = argparse.ArgumentParser()
+    p.add_argument('--editor', type=str, default='emacs', help='Editor to use (supported so far: emacs, gvim)')
     p.add_argument('--install', action='store_true', help='Pass to register MIME in your system')
     p.add_argument('uri', nargs='?')
     p.add_argument('--run-tests', action='store_true', help='Run unit tests')
@@ -170,9 +218,9 @@ def main():
         test_parse_uri()
         test_open_editor()
     elif args.install:
-        install()
+        install(editor=args.editor)
     else:
-        open_editor(args.uri)
+        open_editor(args.uri, editor=args.editor)
 
 
 if __name__ == '__main__':

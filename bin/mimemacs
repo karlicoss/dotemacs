@@ -1,4 +1,22 @@
 #!/usr/bin/env python3
+'''
+
+This script
+
+TODO xdg-open
+
+To register the MIME handler, run
+
+   ./mimemacs --install
+
+'''
+
+# TODO let me know if there is a more standard mechanism
+
+# TODO not sure if it should be emacs:// or something?
+PROTOCOL = "emacs:"
+
+
 import argparse
 from pathlib import Path
 import sys
@@ -6,14 +24,14 @@ import subprocess
 from subprocess import check_call, run
 import tempfile
 
-def error(what):
+
+def error(what) -> None:
+    # notify-send used as a user-facing means of error reporting
     run(["notify-send", what])
     sys.exit(1)
 
-protocol = "emacs:"
 
-
-def install():
+def install() -> None:
     this_script = str(Path(__file__).absolute())
     CONTENT = f"""
 [Desktop Entry]
@@ -36,11 +54,13 @@ MimeType=x-scheme-handler/emacs;
         ])
 
 
-def open(uri: str):
-    if not uri.startswith(protocol):
+
+# TODO split in get_file_and_position, add test (on the top)
+def open(uri: str) -> None:
+    if not uri.startswith(PROTOCOL):
         error(f"Unexpected protocol {uri}")
 
-    uri = uri[len(protocol):]
+    uri = uri[len(PROTOCOL):]
     spl = uri.split(':')
 
     linenum = []
@@ -51,8 +71,10 @@ def open(uri: str):
         # TODO could use that for column number? maybe an overkill though.. https://www.gnu.org/software/emacs/manual/html_node/emacs/emacsclient-Options.html 
         linenum = ["+" + spl[1]]
     else:
+        # TODO what if it actually has colons?
         error(f"Extra colons in URI {uri}")
-
+    from urllib.parse import unquote
+    uri = unquote(uri)
 
     ecmd = [
         "emacsclient",
@@ -71,7 +93,7 @@ def open(uri: str):
 
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument('--install', action='store_true')
+    p.add_argument('--install', action='store_true', help='')
     p.add_argument('uri', nargs='?')
     args = p.parse_args()
     if args.install:

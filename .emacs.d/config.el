@@ -34,7 +34,7 @@
   "Search for files with certail extensions and potentially following symlinks.
    None of standard Elisp functions or popular libs support following symlink :(
    In addition, rg is ridiculously fast."
-  (assert (stringp path)) ;; TODO surely there is a nicer way?? how to define it next to path?
+  (cl-assert (stringp path)) ;; TODO surely there is a nicer way?? how to define it next to path?
   (let* ((patterns (s-join " " (-map (lambda (i) (format "-e %s" i)) exts)))
          (follows (if follow "--follow" ""))
          (rg-command (format
@@ -443,9 +443,6 @@
 
 
   ;; TODO hmm, is there a way to load lazily?
-  (require 'org-sync)
-  (require 'org-sync-github)
-
   (load "~/dotfiles-emacs/babel-mypy.el"))
 
 ;;;
@@ -602,7 +599,7 @@
 ;; TODO ugh. why didn't top level loop and (map! :after org-agenda) work??
 ;; some error about 'days' undefined..
 (after! org-agenda
-  (loop for days from 0 to 9
+  (cl-loop for days from 0 to 9
         do (map! :map org-agenda-mode-map
                  :m (format "%d" days)
                  `(lambda ()
@@ -638,7 +635,7 @@
   ;; otherwise it's lost on theme switching
 
   ;; apparently org-level-N is org-mode specific whereas outline-N is something lower level
-  (loop for level from 1 to 7
+  (cl-loop for level from 1 to 7
         ;; TODO why is doom complaining at level and saying 'reference to a free variable'??
         do (set-face-attribute (intern-soft (format "outline-%d" level)) nil
                                :foreground nil))
@@ -664,11 +661,11 @@
                       :weight 'bold)
 
   (setq org-priority-faces
-        (loop for (_ col sym) in --my/org-priority-map
+        (cl-loop for (_ col sym) in --my/org-priority-map
               collect
               `(,sym . ,col)))
 
-  (loop for (key col sym) in --my/org-priority-map do
+  (cl-loop for (key col sym) in --my/org-priority-map do
         (map! :map org-mode-map
               :localleader
               key `(lambda () (interactive) (org-priority ,sym))))

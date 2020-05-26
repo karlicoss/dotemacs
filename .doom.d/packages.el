@@ -52,9 +52,6 @@
 ;; https://github.com/hlissner/doom-emacs/issues/1946
 (package! evil-escape :disable t)
 
-(package! org-sync
-  :recipe (:host github :repo "karlicoss/org-sync" :branch "fix-nondeterminism"))
-
 (package! el-patch)
 (package! helm-swoop)
 

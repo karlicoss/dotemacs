@@ -20,7 +20,7 @@ PARAMETERS should be keyword value pairs.  See
   ;; do this to support inline http links (without any [])
   (set-face-attribute 'link nil            :foreground "#be5504" :weight 'bold :underline t)
   (org-link-set-parameters "fuzzy" :face '(:foreground "blue"    :weight "bold"))
-  (loop for level from 1 to 8
+  (cl-loop for level from 1 to 8
         ;; TODO why is doom complaining at level and saying 'reference to a free variable'??
         do (set-face-attribute (intern-soft (format "outline-%d" level)) nil
                                :weight 'normal

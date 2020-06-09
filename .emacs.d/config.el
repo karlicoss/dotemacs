@@ -485,7 +485,15 @@
 (defun my/now ()
   "Insert current timestamp in org-mode format"
   (interactive)
-  (insert (format-time-string "[%Y-%m-%d %a %H:%M]")))
+  (save-excursion
+    (let* ((ts (format-time-string "[%Y-%m-%d %a %H:%M]"))
+           (bef (char-equal (char-before) ?\s))
+           (aft (char-equal (char-after)  ?\s)))
+      ;; ugh.
+      (cond (aft (insert (concat " " ts)))
+            (bef (insert (concat ts " ")))
+            (t   (backward-word)
+                 (insert (concat ts " ")))))))
 
 
 (defun my/light ()

@@ -1,7 +1,7 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; $DOOMDIR/packages.el
 
-;; NOTE you need 'doom refresh' and 'doom/reload' after changing this file
+;; NOTE you need 'doom sync' and 'doom/reload' after changing this file
 ;; WARNING: Don't disable core packages listed in ~/.emacs.d/core/packages.el.
 
 
@@ -55,7 +55,9 @@
 (package! el-patch)
 (package! helm-swoop)
 
+(package! org-drill)
+
 (package! org-super-agenda)
 (package! org-ql)
 (package! org-sidebar)
-(package! org-drill)
+(package! org-make-toc)

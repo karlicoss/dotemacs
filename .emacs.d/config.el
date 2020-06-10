@@ -38,7 +38,7 @@
   (let* ((patterns (s-join " " (-map (lambda (i) (format "-e %s" i)) exts)))
          (follows (if follow "--follow" ""))
          (rg-command (format
-	              ;; TODO ugh. quoting third %s broke agenda for some reason (fd complained it wasn't a directory??)
+                      ;; TODO ugh. quoting third %s broke agenda for some reason (fd complained it wasn't a directory??)
                       "fdfind . %s %s %s -x readlink -f" ; ugh, --zero isn't supported on alpine (cloudmacs)
                       follows
                       patterns
@@ -187,6 +187,13 @@
   (defun winum-assign-0-to-neotree ()
     (when (string-match-p (buffer-name) ".*\\*NeoTree\\*.*") 10))
   (add-to-list 'winum-assign-functions #'winum-assign-0-to-neotree))
+
+
+(after! doom-modeline
+  (setq doom-modeline-icon nil)
+  ;; TODO might be nice to reflect global state..
+  (set-face-attribute 'doom-modeline-buffer-modified nil
+                      :foreground "red"))
 
 ;;; org-drill
 

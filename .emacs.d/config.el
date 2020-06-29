@@ -1,6 +1,11 @@
 ;; refined init.el, gradually will mode all of my config here
 
-(load "~/dotfiles-emacs/.emacs.d/patches/org-ql-view.el")
+
+(defun loadr (s)
+  "load relatively to the repository root"
+  (expand-file-name s (file-name-directory (file-name-directory load-file-name))))
+
+(loadr ".emacs.d/patches/org-ql-view.el")
 
 ;;; random helpers
 
@@ -200,7 +205,7 @@
 ;; TODO need to fix resume to remember latest tag? not sure why it's broken..
 (with-eval-after-load 'org-drill
   ;; load patch that makes org-drill detect and present empty cards (without body)
-  (load "~/dotfiles-emacs/.emacs.d/patches/org-drill.el")
+  (loadr ".emacs.d/patches/org-drill.el")
   (add-to-list
    'org-drill-card-type-alist
    '(nil org-drill-present-simple-card nil t))
@@ -383,7 +388,7 @@
 
 
 (with-eval-after-load 'org
-  (load "~/dotfiles-emacs/org.el")
+  (loadr "org.el")
   ;; TODO ugh. I'm really not sure how should I organize my config...
 
   ;; TODO contribute to doom?
@@ -418,7 +423,7 @@
   (setq org-id-track-globally nil)
 
   ;; TODO hmm, is there a way to load lazily?
-  (load "~/dotfiles-emacs/babel-mypy.el"))
+  (loadr "babel-mypy.el"))
 
 ;;;
 
@@ -521,17 +526,18 @@
 (setq frame-title-format "emacs: %b %f")
 
 
-(setq yas-snippet-dirs '("~/dotfiles-emacs/.emacs.d/snippets"))
+;; TODO ugh
+(setq yas-snippet-dirs '("~/.dotfiles/emacs/.emacs.d/snippets"))
 
 ;;;
 
 
 
 (with-eval-after-load 'python
-  (load-file "~/dotfiles-emacs/lang/python.el"))
+  (loadr "lang/python.el"))
 
 
-(load-file "~/dotfiles-emacs/blog.el")
+(loadr "blog.el")
 
 (with-eval-after-load 'graphviz-dot-mode
   (setq graphviz-dot-preview-extension "svg"))

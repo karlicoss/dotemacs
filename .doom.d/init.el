@@ -44,10 +44,7 @@
        ;;objed             ; text object editing for the innocent (TODO)
        parinfer
 
-       ;; TODO??
-       rotate-text       ; cycle region at point between text candidates
        snippets          ; my elves. They type so I don't have to
-       ;;word-wrap         ; soft wrapping with language-aware indent
 
        :emacs
        dired             ; making dired pretty [functional]
@@ -60,8 +57,8 @@
 
        :checkers
        syntax
-       spell             ;; flycheck?
-       grammar           ;; languagetool/writegood mode
+       ;; spell             ;; flycheck?
+       ;; grammar           ;; languagetool/writegood mode
 
        :tools
        ;;debugger          ; FIXME stepping through code, to help you add bugs
@@ -73,7 +70,6 @@
        lsp
        magit             ; a git porcelain for Emacs
        ;;pdf               ; pdf enhancements (TODO)
-       ;;rgb               ; creating color strings (TODO)
        :lang
        data              ; CSV/JSOn modes
        emacs-lisp
@@ -89,7 +85,7 @@
        sh                ; she sells {ba,z,fi}sh shells on the C xor
        web ;; TODO not sure? do I need it or js is enough?
        
-       rust
+       ;;rust
 
        :email
        ;;(mu4e +gmail)

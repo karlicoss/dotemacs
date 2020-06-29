@@ -42,8 +42,8 @@
 ;; they are implemented.
 
 
-(load! "../configs/emacs/private.el")
-(load! "../dotfiles-emacs/.emacs.d/config.el")
+(load! "~/.dotfiles/private/emacs/private.el")
+(load! "~/.dotfiles/emacs/.emacs.d/config.el")
 
 
 (after! so-long

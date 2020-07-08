@@ -2,8 +2,8 @@
 
 
 (defun loadr (s)
-  "load relatively to the repository root"
-  (expand-file-name s (file-name-directory (file-name-directory load-file-name))))
+  "load relatively to the root"
+  (load! (expand-file-name s "~/.dotfiles/emacs/")))
 
 (loadr ".emacs.d/patches/org-ql-view.el")
 
@@ -336,7 +336,7 @@
       (org-refile))))
 
 
-(with-eval-after-load 'org
+(after! org
   ;; TODO eh
   ;; TODO call on timer?
   (--my/org-refile-targets-refresh)
@@ -357,7 +357,7 @@
 ;;;
 
 ;;; org styling
-(with-eval-after-load 'org
+(after! org
   (dolist (tag my/org-private-tags)
     (add-to-list 'org-tag-faces
                  `(,tag . (:foreground "red" :weight bold)))))
@@ -387,7 +387,7 @@
   (helm-org-ql (my/org-files-in my/search-targets :follow t)))
 
 
-(with-eval-after-load 'org
+(after! org
   (loadr "org.el")
   ;; TODO ugh. I'm really not sure how should I organize my config...
 
@@ -429,7 +429,7 @@
 
 ;;; org-agenda
 
-(with-eval-after-load 'org-agenda
+(after! org-agenda
   (setq-default ;; dunno why setq-default, but Doom does it...
 
    ;; by default agenda treats this:
@@ -475,11 +475,11 @@
 
 ;;; org-drill
 
-(with-eval-after-load 'org
+(after! org
   (add-to-list 'org-modules 'org-drill))
 
 
-(with-eval-after-load 'org-drill
+(after! org-drill
   (setq org-drill-learn-fraction 0.3)
   (setq org-drill-pronounce-command nil)) ; disable creepy pronouncing
 
@@ -601,7 +601,11 @@
 (after! evil-org-agenda
   (evil-define-key 'motion evil-org-agenda-mode-map
     "S" #'org-save-all-org-buffers
-    "U" #'my/org-agenda-unschedule))
+    "U" #'my/org-agenda-unschedule
+    ;; for "postpone"
+    "P" #'org-agenda-schedule
+    ;; default is org-agenda-toggle-diary
+    "D" #'org-agenda-deadline))
 
 
 (with-eval-after-load 'evil
@@ -735,7 +739,9 @@
 
 (map! "<f1>" #'my/search
       "<f3>" #'my/search-code
-      "<f4>" #'org-capture)
+      "<f4>" #'org-capture
+      ;; eh, I guess it makes sense, although not super intuiitive that it saves _all_
+      "C-s"  #'evil-write-all)
 
 
 (after! evil

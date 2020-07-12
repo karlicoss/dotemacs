@@ -57,6 +57,9 @@
 
 (package! org-drill)
 
+;; see https://github.com/alphapapa/org-ql/issues/75#issuecomment-657266503
+(package! peg :pin "dad2405312c4f95a064b7d739096d71652799984")
+
 (package! org-super-agenda)
 (package! org-ql)
 (package! org-sidebar)

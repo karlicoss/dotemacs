@@ -1,20 +1,16 @@
 (setq --babel-mypy/exec-python "
 output=$(python3 $tfile 2>&1)
 res=$?
-output=$(echo $output | sed \"$sed_command\")
-
 echo \"Python output [exit code $res]:\"
-echo $output
+printf '%s\n' \"$output\" | sed \"$sed_command\"
 ")
 
 
 (setq --babel-mypy/exec-mypy "
-output=$(python3 -m mypy --show-error-codes --strict $tfile 2>&1)
+output=$(python3 -m mypy --pretty --show-error-context --show-error-codes --strict $tfile 2>&1)
 res=$?
-output=$(echo $output | sed \"$sed_command\")
-
 echo \"Mypy output [exit code $res]:\"
-echo $output
+printf '%s\n' \"$output\" | sed \"$sed_command\"
 ")
 
 (setq --babel-mypy/exec-preamble "

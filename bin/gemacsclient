@@ -1,4 +1,4 @@
-#!/bin/bash -eux
+#!/bin/bash -eu
 # Wrapper script to invoke interactive emacs commands in a daemon instance.
 
 # These days many people don't suspect it,

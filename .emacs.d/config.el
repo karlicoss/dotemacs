@@ -168,13 +168,25 @@
   (interactive)
   (--my/helm-files-do-rg "/"
                          :targets (my/code-targets)
-                         :rg-opts '("-T" "txt"
-                                    "-T" "md"
-                                    "-T" "html"
-                                    "-T" "org"
+                         :rg-opts '("--type-not" "txt"
+                                    "--type-not" "md"
+                                    "--type-not" "html"
+                                    "--type-not" "org"
+                                    ;; todo why did I exclude js??
+                                    "-M" "1000" "--max-columns-preview"
+                                    ;; exclude png in jupiter notebooks
+                                    ;; TODO ugh fuck. doesn't look like it's possible to add negative/empty matches??
+                                    ;; "-v" "image/png.: .iVBORw0KGgoAAAANSUhEUgAAA"
                                     "-g" "!*.org_archive"
                                     ;; TODO this should be a special ripgrep type?
                                     "-g" "!*.min.js")))
+
+
+(defmacro with-helm-fullscreen (&rest body)
+  `(let* ((helm-candidate-number-limit 1000))
+     (with-popup-rules! '(("^*helm-rg" :ttl nil :select t :size 0.9))
+       ,@body)))
+
 
 (defun my/helm-locate ()
   "Default helm-locate uses global database, which contains too much garbage"
@@ -720,9 +732,6 @@
 
 
 (map! :n
-      "zz" #'org-capture)
-
-(map! :n
       "RET" #'helm-swoop) ;; RET is useless in evil mode otherwise!
 
 (map! :leader
@@ -737,11 +746,21 @@
       "s f" #'my/helm-locate)
 
 
-(map! "<f1>" #'my/search
-      "<f3>" #'my/search-code
-      "<f4>" #'org-capture
+
+;; kinda undecided betweek these...
+(map! :n "zz" #'org-capture)
+(map! "<f4>"  #'org-capture)
+
+
+
+(map! "<f1>"   #'my/search
+      "<f3>"   #'my/search-code
+      ;; TODO hmm, there must be some shorter ways to do that??
+      "<S-f1>" '(lambda () (interactive) (with-helm-fullscreen (my/search)))
+      "<S-f3>" '(lambda () (interactive) (with-helm-fullscreen (my/search-code)))
+
       ;; eh, I guess it makes sense, although not super intuiitive that it saves _all_
-      "C-s"  #'evil-write-all)
+      "C-s"    #'evil-write-all)
 
 
 (after! evil

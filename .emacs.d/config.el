@@ -236,8 +236,10 @@
 
 (defun --my/drill-with-tag (tag)
   (require 'org-drill)
-  (let ((org-drill-question-tag tag))
-    (org-drill (my/org-files-in my/drill-targets :follow t))))
+  ;; ugh. so, let binding won't really work because when we pause drilling (e.g. to edit), it finishes the function
+  ;; and next, org-drill-resume starts with the default tag
+  (setq org-drill-question-tag tag)
+  (org-drill (my/org-files-in my/drill-targets :follow t)))
 
 (defun my/habits ()
   (interactive)

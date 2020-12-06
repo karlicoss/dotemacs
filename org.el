@@ -162,3 +162,5 @@
         ("w" "workout"   entry (file --my/org-capture-workouts-file)  "* %U %? :wlog:\n")))
 
 (setq org-capture-templates (-concat org-capture-templates --my/extra-capture-templates))
+
+(setq org-startup-with-inline-images nil)

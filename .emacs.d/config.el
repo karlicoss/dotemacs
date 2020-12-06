@@ -116,14 +116,14 @@
 
 
 (defun --my/one-off-helm-follow-mode ()
-;; I only want helm follow when I run helm-ag against my notes,
+;; I only want helm follow when I run helm search against my notes,
 ;; but not all the time, in particular when I'm running my/search-code because it
 ;; triggers loading LSP etc
 ;; Problem is helm-follow-mode seems to be handled on per-source basis
 ;; and there is some logic that tries to persist it in customize-variables
 ;; for future emacs sessions.
-;; helm-ag on one hand seems to use since source (helm-ag-source) for all searches
-;; on the orther hand it does some sort of dynamic renaming and messing with source names
+;; helm-ag/helm-rg on one hand seems to use same source or all searches
+;; also helm-ag it does some sort of dynamic renaming and messing with source names
 ;; (e.g. search by "helm-attrset 'name")
 ;; As a result it's very unclear what's actually happening even after few hours of debugging.
 ;; also see https://github.com/emacs-helm/helm/issues/2006,
@@ -193,11 +193,6 @@
   (interactive)
   (helm-locate-with-db my/locate-database-path))
 
-
-(with-eval-after-load 'helm-ag
-  ;; see helm-ag--construct-command. Not configurable otherwise ATM
-  (defun helm-ag--construct-ignore-option (pattern)
-    (concat "--glob=!" pattern)))
 ;;;
 
 (after! winum

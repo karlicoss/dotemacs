@@ -56,6 +56,7 @@
 
        :checkers
        syntax
+       ;; TODO just make these on demand?
        ;; spell             ;; flycheck?
        ;; grammar           ;; languagetool/writegood mode
 
@@ -67,21 +68,21 @@
        (lookup           ; helps you navigate your code and documentation
         +docsets)        ; ...or in Dash docsets locally
        lsp
-       magit             ; a git porcelain for Emacs
+       magit
        ;;pdf               ; pdf enhancements (TODO)
        :lang
-       data              ; CSV/JSOn modes
+       data              ; CSV/JSON modes
        emacs-lisp
-       ;;(haskell +dante)
        javascript
        markdown
        (org
+        +roam
         +dragndrop       ; drag & drop files/images into org buffers (TODO)
         ;;+jupyter        ; ipython/jupyter support for babel (TODO)
         +present)
        (python
         +lsp)
-       sh                ; she sells {ba,z,fi}sh shells on the C xor
+       sh
        web ;; TODO not sure? do I need it or js is enough?
        
        ;;rust
@@ -95,8 +96,6 @@
        ;;calendar
        ;; TODO try with axol?
        ;;(rss +org)        ; emacs as an RSS reader
-       ;; TODO?
-       ;;twitter           ; twitter client https://twitter.com/vnought
 
        :config
        ;;literate

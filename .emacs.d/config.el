@@ -575,6 +575,12 @@
   (interactive)
   (org-agenda-schedule nil (format "+%dd" days)))
 
+
+(defun my/x-terminal-emulator ()
+  (interactive)
+  (shell-command "x-terminal-emulator >/dev/null 2>&1 & disown" nil nil))
+
+
 ;; TODO not sure what's the difference between org-defkey and other methods of binding...
 ;; https://lists.gnu.org/archive/html/emacs-orgmode/2011-02/msg00260.html
 

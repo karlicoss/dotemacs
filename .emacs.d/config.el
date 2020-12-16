@@ -769,6 +769,15 @@
 (after! evil
   (evil-ex-define-cmd "ww" #'save-some-buffers))
 
+(after! esh-mode
+  (map! :map eshell-mode-map
+  ;; default it quite stupid, it sends in insert mode on enter press??
+        :n  "RET"    #'eshell-send-input
+        :n  [return] #'eshell-send-input
+        :i  "RET"    '(lambda () (interactive) (insert "\n"))
+        :i  [return] '(lambda () (interactive) (insert "\n"))))
+
+
 
 ;; f2 for consistency with tmux
 ;; interesting. not sure how, but this actually does manage to map all the workspace keys that are mapped by default

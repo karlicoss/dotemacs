@@ -111,7 +111,8 @@
       (unless (boundp '*--my/git-repos*)
         (--my/git-repos-refresh)
         (run-with-idle-timer refresh-interval-seconds t '--my/git-repos-refresh))
-      *--my/git-repos*)))
+      ;; ugh. do extra filter, otherwise helm-rg stumbles over it
+      (-filter #'file-directory-p *--my/git-repos*))))
 
 
 

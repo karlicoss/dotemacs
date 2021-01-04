@@ -337,14 +337,22 @@
           ;; (--my/get-opened-org-files   :tag . "refile"))))
 
 
+;; TODO disable history by default and only keep it for global refile explicitly
 (after! org
   (defun my/org-refile-to-exobrain ()
     (interactive)
     (let* ((exobrain-files (my/org-files-in --my/exobrain-path))
            (org-refile-use-outline-path nil)
            (org-refile-targets '((exobrain-files :tag . "refile"))))
-      (org-refile))))
+      (org-refile)))
 
+  (defun my/org-refile-to-current-file ()
+    ;; also see +org/refile-to-current-file in Doom.
+    ;; it uses outline-path and messes with org-refile-keep... not sure I want it?
+    (interactive)
+    (let* ((org-refile-targets nil)  ;; current buffer
+           (org-refile-history nil)) ;; TODO maybe commit this to doom?
+      (org-refile))))
 
 (after! org
   ;; TODO eh
@@ -693,6 +701,7 @@
         ;; doom maps to refile menu by default
         ;; "r" #'org-refile
         "," #'org-refile
+        "." #'my/org-refile-to-current-file
         "e" #'my/org-refile-to-exobrain
 
         "x" #'org-cut-subtree

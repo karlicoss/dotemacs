@@ -283,7 +283,10 @@
                :order -20)
         (:name "Drill"
                :tag ("drill" "habit")
-               :order 999))) ;; sink drill all the way down
+               :order  400)
+        (:name "tweets on that day"
+                :tag "ttweet"
+                :order 500)))
 
 
 (setq my/org-private-tags '("pr" "prv" "private"))

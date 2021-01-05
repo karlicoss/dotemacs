@@ -72,7 +72,8 @@
   "Moves cancel and done down; otherwise by priority"
   (let* ((todo         (org-entry-get (point) "TODO"))
          (priority     (org-entry-get (point) "PRIORITY"))
-         (todo-int     (if (member todo org-done-keywords) 1 0))
+         (tidx         (-elem-index todo org-done-keywords))
+         (todo-int     (if (null tidx) 0 (+ tidx 1)))
          (priority-int (if priority (string-to-char priority) org-default-priority))
          (keystr       (format "%03d %03d" todo-int priority-int)))
     keystr))

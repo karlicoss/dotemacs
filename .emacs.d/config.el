@@ -425,6 +425,7 @@
                              "WAIT(w@)"
                              "|"
                              "DONE(d!)"
+                             "CNCL"
                              "CANCEL(c@)"
                              "SKIP(k!)"))
 

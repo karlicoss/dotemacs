@@ -163,7 +163,8 @@
   (interactive)
   (--my/one-off-helm-follow-mode)
   (--my/helm-files-do-rg my/search-targets
-                         :rg-opts '("--follow")))
+                         :rg-opts '("--follow"
+                                    "-M" "1000" "--max-columns-preview")))
 
 (defun my/search-code ()
   (interactive)
@@ -342,11 +343,25 @@
 
 ;; TODO disable history by default and only keep it for global refile explicitly
 (after! org
+  ;; use separate refile history for different kinds of refile...
+  ;; ugh. horrible, some sort of hash map would be much better...
+  (defvar --my/refile-kind nil)
+  (defvar --my/org-refile-history/exobrain nil)
+  (defvar --my/org-refile-history/current  nil)
+  (defvar --my/org-refile-history/default  nil)
+  (defun --my/dispatch-refile-history (orig &rest args)
+    (let* ((rsymbol (intern (format "--my/org-refile-history/%s" (or --my/refile-kind "default"))))
+           (org-refile-history (symbol-value rsymbol)))
+      (apply orig args)
+      (set rsymbol org-refile-history)))
+  (advice-add #'org-refile :around #'--my/dispatch-refile-history)
+
   (defun my/org-refile-to-exobrain ()
     (interactive)
     (let* ((exobrain-files (my/org-files-in --my/exobrain-path))
            (org-refile-use-outline-path nil)
-           (org-refile-targets '((exobrain-files :tag . "refile"))))
+           (org-refile-targets '((exobrain-files :tag . "refile")))
+           (--my/refile-kind   "exobrain"))
       (org-refile)))
 
   (defun my/org-refile-to-current-file ()
@@ -354,7 +369,7 @@
     ;; it uses outline-path and messes with org-refile-keep... not sure I want it?
     (interactive)
     (let* ((org-refile-targets nil)  ;; current buffer
-           (org-refile-history nil)) ;; TODO maybe commit this to doom?
+           (--my/refile-kind   "current")) ;; TODO maybe commit this to doom?
       (org-refile))))
 
 (after! org

@@ -351,18 +351,19 @@
   (defvar --my/org-refile-history/default  nil)
   (defun --my/dispatch-refile-history (orig &rest args)
     (let* ((rsymbol (intern (format "--my/org-refile-history/%s" (or --my/refile-kind "default"))))
-           (org-refile-history (symbol-value rsymbol)))
-      (apply orig args)
-      (set rsymbol org-refile-history)))
-  (advice-add #'org-refile :around #'--my/dispatch-refile-history)
+           (org-refile-history (symbol-value rsymbol))
+           (res (apply orig args)))
+      (set rsymbol org-refile-history)
+      res))
+  (advice-add #'org-refile-get-location :around #'--my/dispatch-refile-history)
 
-  (defun my/org-refile-to-exobrain ()
-    (interactive)
-    (let* ((exobrain-files (my/org-files-in --my/exobrain-path))
-           (org-refile-use-outline-path nil)
-           (org-refile-targets '((exobrain-files :tag . "refile")))
-           (--my/refile-kind   "exobrain"))
-      (org-refile)))
+  ;; todo idk, if macro is really idiomatic for this sort of thing.. could tage  a function and args too I guess
+  (defmacro --my/with-exobrain (&rest body)
+    `(let* ((exobrain-files (my/org-files-in --my/exobrain-path))
+           ;; (org-refile-use-outline-path nil)
+            (org-refile-targets '((exobrain-files :tag . "refile")))
+            (--my/refile-kind   "exobrain"))
+       ,@body))
 
   (defun my/org-refile-to-current-file ()
     ;; also see +org/refile-to-current-file in Doom.
@@ -370,7 +371,23 @@
     (interactive)
     (let* ((org-refile-targets nil)  ;; current buffer
            (--my/refile-kind   "current")) ;; TODO maybe commit this to doom?
-      (org-refile))))
+      (org-refile)))
+
+  (defun --my/get-exobrain-location ()
+    (interactive)
+    (--my/with-exobrain
+      (let* ((loc (org-refile-get-location))
+             (locf (nth 1 loc))
+             (pos  (car ;; psa: fuck this...
+                    (last loc))))
+        (set-buffer (org-capture-target-buffer locf))
+        (goto-char (or pos (point-max))))))
+
+  (defun my/org-refile-to-exobrain ()
+    (interactive)
+    (--my/with-exobrain (org-refile))))
+
+
 
 (after! org
   ;; TODO eh

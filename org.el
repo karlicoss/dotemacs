@@ -153,10 +153,13 @@
 (defvar --my/extra-capture-templates '())
 
 
-;; TODO merge with private
+(setq --my/capture-template "%? %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n")
+
+;; TODO not sure if need separate todo/note?
 (setq org-capture-templates
-      '(("t" "todo"      entry (file --my/org-capture-file)         "* TODO %? %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n")
-        ("n" "note"      entry (file --my/org-capture-file)              "* %? %^g\n:PROPERTIES:\n:CREATED: %U\n:END:\n")
+      `(("t" "todo"      entry (file --my/org-capture-file)          ,(concat "* TODO " --my/capture-template))
+        ("n" "note"      entry (file --my/org-capture-file)          ,(concat "* "      --my/capture-template))
+        ("e" "exobrain"  entry (function --my/get-exobrain-location) ,(concat "* TODO " --my/capture-template))
         ;; TODO remote "note"? easy to remove todo state if necessary
         ("f" "this file" entry (file buffer-file-name)              "* TODO %? \n:PROPERTIES:\n:CREATED: %U\n:END:\n")
         ("l" "log entry" entry (file --my/org-capture-log-file)       "* %U %? %^g\n")

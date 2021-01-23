@@ -28,6 +28,22 @@
     (if has-children nil (org-do-demote)) (insert " ")
     (evil-append 1)))
 
+(defun my/org-makelink (start end)
+  ;; quickly makes a proper org-link from description + http string
+  (interactive "r")
+  (let* ((sel (buffer-substring start end))
+         (spl  (s-slice-at "http" sel))
+         (_    (cl-assert (= (length spl) 2)))
+         (desc (s-trim (car  spl)))
+         (url  (s-trim (cadr spl)))
+         (org  (format "[[%s][%s]]" url desc)))
+  ;; ugh. it's not very atomic, is there no replace primitive??
+    (save-excursion
+      (kill-region start end)
+      (goto-char start)
+      (insert org))))
+
+
 (defun my/org-eshell-command (command)
   ;; run command in eshell (e.g. [[eshell: ls -al /home]]
   (interactive)

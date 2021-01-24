@@ -385,8 +385,13 @@
 
   (defun my/org-refile-to-exobrain ()
     (interactive)
-    (--my/with-exobrain (org-refile))))
+    (--my/with-exobrain (org-refile)))
 
+  (cl-defun my/exobrain-org-ql-search ()
+    (interactive)
+    (let* ((org-directory --my/exobrain-path) ;; todo maybe put in with-exobrain?
+           (org-ql-search-directories-files-recursive t))
+      (call-interactively #'org-ql-search)))) ;; todo ugh. unclear how to pass "org-directory" (and maybe other defaults?)
 
 
 (after! org

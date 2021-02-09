@@ -1,5 +1,9 @@
+; -*- mode: Lisp; paredit-mode: 0; -*-
+
 ;; reason for patching: no support for filename in the result list
 ;; TODO merge in upstream? or suggest some more flexible api
+;; some discussion https://github.com/karlicoss/dotemacs/commit/85c7e0ddc821337e0a822c25756d47426b9a92a8#commitcomment-37820260
+;; maybe relevant https://github.com/alphapapa/org-ql/issues/23
 
 (el-patch-feature org-ql-view)
 (with-eval-after-load 'org-ql-view
@@ -70,7 +74,7 @@ return an empty string."
            (due-string (pcase (org-element-property :relative-due-date element)
                          ('nil "")
                          (string (format " %s " (org-add-props string nil 'face 'org-ql-view-due-date)))))
-           (string (s-join " " (-non-nil (list (el-patch-add filename) todo-keyword priority-string title due-string tag-string)))))
+           (string (s-join " " (-non-nil (list todo-keyword priority-string (el-patch-add (concat filename ":")) title due-string tag-string)))))
       (remove-list-of-text-properties 0 (length string) '(line-prefix) string)
       ;; Add all the necessary properties and faces to the whole string
       (--> string

@@ -362,7 +362,9 @@
     `(let* ((exobrain-files (my/org-files-in --my/exobrain-path))
            ;; (org-refile-use-outline-path nil)
             (org-refile-targets '((exobrain-files :tag . "refile")))
-            (--my/refile-kind   "exobrain"))
+            (--my/refile-kind   "exobrain")
+            (org-directory --my/exobrain-path)
+            (org-ql-search-directories-files-recursive t))
        ,@body))
 
   (defun my/org-refile-to-current-file ()
@@ -389,9 +391,8 @@
 
   (cl-defun my/exobrain-org-ql-search ()
     (interactive)
-    (let* ((org-directory --my/exobrain-path) ;; todo maybe put in with-exobrain?
-           (org-ql-search-directories-files-recursive t))
-      (call-interactively #'org-ql-search)))) ;; todo ugh. unclear how to pass "org-directory" (and maybe other defaults?)
+    (--my/with-exobrain (call-interactively #'org-ql-search))))
+;; todo ugh. unclear how to pass "org-directory" (and maybe other defaults?)
 
 
 (after! org

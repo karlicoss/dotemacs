@@ -419,8 +419,11 @@
 (after! org
   (dolist (tag my/org-private-tags)
     (add-to-list 'org-tag-faces
-                 `(,tag . (:foreground "red" :weight bold)))))
+                 `(,tag . (:foreground "red" :weight bold))))
 
+  (dolist (color '("yellow" "red" "purple" "blue" "green"))
+      (add-to-list 'org-tag-faces
+                   `(,color . (:background ,color)))))
 ;;;
 
 ;;; misc org stuff

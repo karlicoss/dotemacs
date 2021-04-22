@@ -67,7 +67,7 @@
        (eval +overlay)     ; run code, run (also, repls)
        (lookup           ; helps you navigate your code and documentation
         +docsets)        ; ...or in Dash docsets locally
-       lsp
+       ;; lsp
        magit
        ;;pdf               ; pdf enhancements (TODO)
        :lang
@@ -80,8 +80,7 @@
         +dragndrop       ; drag & drop files/images into org buffers (TODO)
         ;;+jupyter        ; ipython/jupyter support for babel (TODO)
         +present)
-       (python
-        +lsp)
+       python
        sh
        web ;; TODO not sure? do I need it or js is enough?
        

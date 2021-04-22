@@ -595,6 +595,8 @@
 ;;;
 
 
+;; fuck this check
+(setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
 
 (with-eval-after-load 'python
   (loadr "lang/python.el"))

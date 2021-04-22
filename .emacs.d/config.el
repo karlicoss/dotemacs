@@ -159,10 +159,33 @@
   (add-hook 'helm-cleanup-hook '--my/disable-helm-follow-mode))
 
 
+;; TODO move all search stuff into separate file?
+(defun --resolve-links (path)
+  (let* ((cmd `("fdfind"
+                "--type=l"
+                "."
+                ,path
+                "-x" "readlink" "-f"
+                ))
+         (qcmd (combine-and-quote-strings cmd))
+         (cres (shell-command-to-string qcmd))
+         (res (s-split "\n" cres t)))
+    res))
+
+
 (defun my/search ()
   (interactive)
   (--my/one-off-helm-follow-mode)
-  (--my/helm-files-do-rg my/search-targets
+  (--my/helm-files-do-rg "/"
+                         :targets (--resolve-links my/search-targets)
+                         :rg-opts '("--follow"
+                                    "-M" "1000" "--max-columns-preview")))
+
+(defun my/search-public ()
+  (interactive)
+  (--my/one-off-helm-follow-mode)
+  (--my/helm-files-do-rg "/"
+                         :targets (--resolve-links my/search-public-targets)
                          :rg-opts '("--follow"
                                     "-M" "1000" "--max-columns-preview")))
 
@@ -812,12 +835,27 @@
 (map! "<f4>"  #'org-capture)
 
 
+;; TODO hmm, there must be some shorter ways to do that??
+(defun my/search-fs ()
+  (interactive)
+  (with-helm-fullscreen (my/search)))
 
+(defun my/search-public-fs ()
+  (interactive)
+  (with-helm-fullscreen (my/search-public)))
+
+(defun my/search-code-fs ()
+  (interactive)
+  (with-helm-fullscreen (my/search-code)))
+
+
+;; TODO shit code search header is super large (shift-f3?)
 (map! "<f1>"   #'my/search
+      "<S-f1>" #'my/search-fs
+      "<f2>"   #'my/search-public
+      "<S-f2>" #'my/search-public-fs
       "<f3>"   #'my/search-code
-      ;; TODO hmm, there must be some shorter ways to do that??
-      "<S-f1>" '(lambda () (interactive) (with-helm-fullscreen (my/search)))
-      "<S-f3>" '(lambda () (interactive) (with-helm-fullscreen (my/search-code)))
+      "<S-f3>" #'my/search-code-fs
 
       ;; eh, I guess it makes sense, although not super intuiitive that it saves _all_
       "C-s"    #'evil-write-all)

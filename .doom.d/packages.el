@@ -1,23 +1,17 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; $DOOMDIR/packages.el
+;; NOTE: run vimdiff packages.el ~/.config/emacs/core/templates/packages.example.el now and then
 
-;; NOTE you need 'doom sync' and 'doom/reload' after changing this file
-;; WARNING: Don't disable core packages listed in ~/.emacs.d/core/packages.el.
-
-
-;; All of Doom's packages are pinned to a specific commit, and updated from
-;; release to release. To un-pin all packages and live on the edge, do:
-;(setq doom-pinned-packages nil)
-
-;; ...but to unpin a single package:
-;(package! pinned-package :pin nil)
+;; To install a package with Doom you must declare them here and run 'doom sync'
+;; on the command line, then restart Emacs for the changes to take effect -- or
+;; use 'M-x doom/reload'.
 
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;(package! some-package)
 
-;; To install a package directly from a particular repo, you'll need to specify
-;; a `:recipe'. You'll find documentation on what `:recipe' accepts here:
+;; To install a package directly from a remote git repo, you must specify a
+;; `:recipe'. You'll find documentation on what `:recipe' accepts here:
 ;; https://github.com/raxod502/straight.el#the-recipe-format
 ;(package! another-package
 ;  :recipe (:host github :repo "username/repo"))
@@ -29,8 +23,8 @@
 ;  :recipe (:host github :repo "username/repo"
 ;           :files ("some-file.el" "src/lisp/*.el")))
 
-;; If you'd like to disable a package included with Doom, for whatever reason,
-;; you can do so here with the `:disable' property:
+;; If you'd like to disable a package included with Doom, you can do so here
+;; with the `:disable' property:
 ;(package! builtin-package :disable t)
 
 ;; You can override the recipe of a built in package without having to specify
@@ -44,9 +38,19 @@
 ;; our package manager can't deal with; see raxod502/straight.el#279)
 ;(package! builtin-package :recipe (:branch "develop"))
 
+;; Use `:pin' to specify a particular commit to install.
+;(package! builtin-package :pin "1a2b3c4d5e")
+
+
+;; Doom's packages are pinned to a specific commit and updated from release to
+;; release. The `unpin!' macro allows you to unpin single packages...
+;(unpin! pinned-package)
+;; ...or multiple packages
+;(unpin! pinned-package another-pinned-package)
+;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
+;(unpin! t)
 
 (package! winum :pin nil)
-
 
 ;; annoying; sets escape sequence to jk
 ;; https://github.com/hlissner/doom-emacs/issues/1946

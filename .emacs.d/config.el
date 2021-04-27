@@ -481,17 +481,26 @@
   (setq org-babel-python-command "python3")
 
   ;; TODO not sure with doom's after! keyword, when it's the right time to do this really...
+  ;; ! to record timestamp
+  ;; @ to add a note
   (setq org-todo-keywords '((sequence
                              "TODO(t)"
-                             ;; TODO not sure with doom's after! keyword, when it's the right time to do this really...
-                             "START(!)" ;; TODO deprecate START
-                             "STRT(s!)"
-                             "WAIT(w@)"
+                             "NEXT(n!)"
+                             "STRT(s!)" "START(!)" ;; todo deprecate START
+                             "WAIT(w@/!)"
                              "|"
                              "DONE(d!)"
-                             "CNCL"
-                             "CANCEL(c@)"
+                             "CNCL(c@/!)" "CANCEL(@/!)" ;; todo deprecate CANCEL?
                              "SKIP(k!)"))
+
+        org-todo-keyword-faces '(
+	                     ; TODO -- handled by emacs
+                             ("NEXT" . +org-todo-active)
+                             ("STRT" . +org-todo-active)
+                             ("WAIT" . +org-todo-onhold)
+			     ; DONE -- handled by emacs
+                             ("CNCL" . +org-todo-cancel)
+                             ("SKIP" . +org-todo-cancel))
 
         ;; override Doom's default
         org-enforce-todo-dependencies nil
